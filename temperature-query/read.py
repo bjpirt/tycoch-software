@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import minimalmodbus
+from pymodbus.client.sync import ModbusSerialClient as ModbusClient
 import time
 import ctypes
 import sys
@@ -9,16 +9,17 @@ if len(sys.argv) < 2:
 else:
   port = sys.argv[1]
 
-minimalmodbus.BAUDRATE = 57600
 
 try:
-  instrument = minimalmodbus.Instrument(port, 1) # port name, slave address (in decimal)
+  client = ModbusClient(method='rtu', port=port, baudrate=57600, timeout=1)
+  client.connect()
 
   #### Read the tank sensor
+  res = client.read_holding_registers(0, 4, unit=0x01)
   sensor_names = ["tank-sensor1", "tank-sensor2", "tank-sensor3", "tank-sensor4"]
   max_temp = 85
   min_temps = [20, 30, 40, 50]
-  readings = map(lambda x: ctypes.c_short(x).value * 0.0078125, instrument.read_registers(0, 4, 3))
+  readings = map(lambda x: ctypes.c_short(x).value * 0.0078125, res.registers)
 
   for index, temp in enumerate(readings):
     print "%s value=%f" % (sensor_names[index], temp)
