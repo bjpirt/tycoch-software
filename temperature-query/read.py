@@ -9,11 +9,10 @@ if len(sys.argv) < 2:
 else:
   port = sys.argv[1]
 
-
 try:
   client = ModbusClient(method='rtu', port=port, baudrate=57600, timeout=1)
   client.connect()
-
+  
   #### Read the tank sensor
   res = client.read_holding_registers(0, 4, unit=0x01)
   sensor_names = ["tank-sensor1", "tank-sensor2", "tank-sensor3", "tank-sensor4"]
@@ -22,7 +21,8 @@ try:
   readings = map(lambda x: ctypes.c_short(x).value * 0.0078125, res.registers)
 
   for index, temp in enumerate(readings):
-    print "%s value=%f" % (sensor_names[index], temp)
+    if temp != -256:
+      print "%s value=%f" % (sensor_names[index], temp)
 
   #### Calculate the gradients and work out the % full
   total = 0
