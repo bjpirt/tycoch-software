@@ -20,17 +20,21 @@ try:
   min_temps = [20, 30, 40, 50]
   readings = map(lambda x: ctypes.c_short(x).value * 0.0078125, res.registers)
 
+  out = []
   for index, temp in enumerate(readings):
     if temp != -256:
-      print "%s value=%f" % (sensor_names[index], temp)
+      out.append("%s=%f" % (sensor_names[index],temp))
 
-  #### Calculate the gradients and work out the % full
-  total = 0
-  for i in range(4):
-    if(readings[i] > min_temps[i]):  
-      total += (readings[i] - min_temps[i]) / (max_temp - min_temps[i])
-  total = (total / 4) * 100
-
-  print "tank-level value=%f" % (total)
+  
+  if len(out) > 0:
+    #### Calculate the gradients and work out the % full
+    total = 0
+    for i in range(4):
+      if(readings[i] > min_temps[i]):  
+        total += (readings[i] - min_temps[i]) / (max_temp - min_temps[i])
+    total = (total / 4) * 100
+    out.append("level=%f" % (total))
+    print "thermal-store " + ','.join(out)
+    
 except:
   sys.exit(1)
