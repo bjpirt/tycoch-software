@@ -1,0 +1,32 @@
+# Create the database
+CREATE DATABASE IF NOT EXISTS tycoch
+
+# Set up the retention policies
+CREATE RETENTION POLICY oneday ON tycoch DURATION 1d REPLICATION 1 DEFAULT
+CREATE RETENTION POLICY ninetyday ON tycoch DURATION 1d REPLICATION 1
+CREATE RETENTION POLICY forever ON tycoch DURATION INF REPLICATION 1
+
+# Create the continuous queries to downsample the data
+CREATE CONTINUOUS QUERY "cq_1m" ON "tycoch" BEGIN
+  SELECT
+    mean("tank-sensor1") AS "mean_tank-sensor1",
+    mean("tank-sensor2") AS "mean_tank-sensor2",
+    mean("tank-sensor3") AS "mean_tank-sensor3",
+    mean("tank-sensor4") AS "mean_tank-sensor4",
+    mean("tank-level") AS "mean_tank-level"
+  INTO "ninetyday"."thermal-store_90d"
+  FROM "thermal-store"
+  GROUP BY time(1m)
+END
+
+CREATE CONTINUOUS QUERY "cq_10m" ON "tycoch" BEGIN
+  SELECT
+    mean("tank-sensor1") AS "mean_tank-sensor1",
+    mean("tank-sensor2") AS "mean_tank-sensor2",
+    mean("tank-sensor3") AS "mean_tank-sensor3",
+    mean("tank-sensor4") AS "mean_tank-sensor4",
+    mean("tank-level") AS "mean_tank-level"
+  INTO "forever"."thermal-store_forever"
+  FROM "thermal-store_90d"
+  GROUP BY time(10m)
+END
