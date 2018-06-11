@@ -37,18 +37,18 @@ try:
 
   out = []
   for index, temp in enumerate(readings):
-    if temp != -256:
+    if temp != -256 and temp != -55:
       out.append("%s=%f" % (sensor_names[index],temp))
 
   if len(out) > 0:
     #### Calculate the gradients and work out the % full
     total = 0
     for i in range(4):
-      if(readings[i] > min_temps[i]):  
+      if(readings[i] > min_temps[i]):
         total += (readings[i] - min_temps[i]) / (max_temp - min_temps[i])
     total = (total / 4) * 100
     out.append("level=%f" % (total))
     print "thermal-store " + ','.join(out)
-    
+
 except:
-  sys.exit(1)
+  sys.exit(0)
