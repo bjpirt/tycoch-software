@@ -7,50 +7,5 @@ CREATE RETENTION POLICY ninetyday ON tycoch DURATION 90d REPLICATION 1
 CREATE RETENTION POLICY forever ON tycoch DURATION INF REPLICATION 1
 
 # Create the continuous queries to downsample the data
-# thermal-store
-CREATE CONTINUOUS QUERY "tank-sensor_1m_cq" ON "tycoch" BEGIN SELECT mean("tank-sensor1") AS "mean_1m_tank-sensor1",    mean("tank-sensor2") AS "mean_1m_tank-sensor2",   mean("tank-sensor3") AS "mean_1m_tank-sensor3",    mean("tank-sensor4") AS "mean_1m_tank-sensor4",    mean("tank-level") AS "mean_1m_tank-level"  INTO "ninetyday"."thermal-store"  FROM "thermal-store"  GROUP BY time(1m) END
-
-CREATE CONTINUOUS QUERY "tank-sensor_10m_cq" ON "tycoch" BEGIN  SELECT  mean("tank-sensor1") AS "mean_10m_tank-sensor1",    mean("tank-sensor2") AS "mean_10m_tank-sensor2",    mean("tank-sensor3") AS "mean_10m_tank-sensor3",    mean("tank-sensor4") AS "mean_10m_tank-sensor4",    mean("tank-level") AS "mean_10m_tank-level"  INTO "forever"."thermal-store"  FROM "thermal-store"  GROUP BY time(10m) END
-
-# temperature
-CREATE CONTINUOUS QUERY "temperature_1m_cq" ON "tycoch" BEGIN SELECT mean("internal") AS "mean_1m_internal", mean("external") AS "mean_1m_external"  INTO "ninetyday"."temperature"  FROM "temperature"  GROUP BY time(1m) END
-
-CREATE CONTINUOUS QUERY "temperature_10m_cq" ON "tycoch" BEGIN SELECT mean("internal") AS "mean_10m_internal", mean("external") AS "mean_10m_external"  INTO "forever"."temperature"  FROM "temperature"  GROUP BY time(10m) END
-
-# gas boiler
-CREATE CONTINUOUS QUERY "gas-boiler_1m_cq" ON "tycoch" BEGIN SELECT mean("in-temp") AS "mean_1m_in-temp", mean("out-temp") AS "mean_1m_out-temp"  INTO "ninetyday"."gas-boiler"  FROM "gas-boiler"  GROUP BY time(1m) END
-
-CREATE CONTINUOUS QUERY "gas-boiler_10m_cq" ON "tycoch" BEGIN SELECT mean("in-temp") AS "mean_10m_in-temp", mean("out-temp") AS "mean_10m_out-temp"  INTO "forever"."gas-boiler"  FROM "gas-boiler"  GROUP BY time(10m) END
-
-# fire
-CREATE CONTINUOUS QUERY "fire_1m_cq" ON "tycoch" BEGIN SELECT mean("in-temp") AS "mean_1m_in-temp", mean("out-temp") AS "mean_1m_out-temp"  INTO "ninetyday"."fire"  FROM "fire"  GROUP BY time(1m) END
-
-CREATE CONTINUOUS QUERY "fire_10m_cq" ON "tycoch" BEGIN SELECT mean("in-temp") AS "mean_10m_in-temp", mean("out-temp") AS "mean_10m_out-temp"  INTO "forever"."fire"  FROM "fire"  GROUP BY time(10m) END
-
-# ac
-CREATE CONTINUOUS QUERY "ac_1m_cq" ON "tycoch" BEGIN SELECT mean("power-usage") AS "mean_1m_power-usage", mean("batt-voltage") AS "mean_1m_batt-voltage"  INTO "ninetyday"."ac"  FROM "ac"  GROUP BY time(1m) END
-SELECT mean("power-usage") AS "mean_1m_power-usage", mean("batt-voltage") AS "mean_1m_batt-voltage"  INTO "ninetyday"."ac"  FROM "ac" WHERE time > now() - 24h GROUP BY time(1m) 
-
-CREATE CONTINUOUS QUERY "ac_10m_cq" ON "tycoch" BEGIN SELECT mean("power-usage") AS "mean_10m_power-usage", mean("batt-voltage") AS "mean_10m_batt-voltage"  INTO "forever"."ac"  FROM "ac"  GROUP BY time(10m) END
-SELECT mean("power-usage") AS "mean_10m_power-usage", mean("batt-voltage") AS "mean_10m_batt-voltage"  INTO "forever"."ac"  FROM "ac" WHERE time > now() - 24h GROUP BY time(10m)
-
-# battery
-CREATE CONTINUOUS QUERY "battery_1m_cq" ON "tycoch" BEGIN SELECT mean("current") AS "mean_1m_current", mean("state-of-charge") AS "mean_1m_state-of-charge", mean("voltage") AS "mean_1m_voltage"  INTO "ninetyday"."battery"  FROM "battery"  GROUP BY time(1m) END
-SELECT mean("current") AS "mean_1m_current", mean("state-of-charge") AS "mean_1m_state-of-charge", mean("voltage") AS "mean_1m_voltage"  INTO "ninetyday"."battery"  FROM "battery" WHERE time > now() - 24h GROUP BY time(1m)
-
-CREATE CONTINUOUS QUERY "battery_10m_cq" ON "tycoch" BEGIN SELECT mean("current") AS "mean_10m_current", mean("state-of-charge") AS "mean_10m_state-of-charge", mean("voltage") AS "mean_10m_voltage"  INTO "forever"."battery"  FROM "battery"  GROUP BY time(10m) END
-SELECT mean("current") AS "mean_10m_current", mean("state-of-charge") AS "mean_10m_state-of-charge", mean("voltage") AS "mean_10m_voltage"  INTO "forever"."battery"  FROM "battery" WHERE time > now() - 24h GROUP BY time(10m)
-
-# immersion
-CREATE CONTINUOUS QUERY "immersion_1m_cq" ON "tycoch" BEGIN SELECT mean("batt-temperature") AS "mean_1m_batt-temperature", mean("batt-voltage") AS "mean_1m_batt-voltage", mean("load-current") AS "mean_1m_load-current", mean("power") AS "mean_1m_power", mean("pwm-level") AS "mean_1m_pwm-level"  INTO "ninetyday"."immersion"  FROM "immersion"  GROUP BY time(1m) END
-SELECT mean("batt-temperature") AS "mean_1m_batt-temperature", mean("batt-voltage") AS "mean_1m_batt-voltage", mean("load-current") AS "mean_1m_load-current", mean("power") AS "mean_1m_power", mean("pwm-level") AS "mean_1m_pwm-level"  INTO "ninetyday"."immersion"  FROM "immersion" WHERE time > now() - 24h GROUP BY time(1m)
-
-CREATE CONTINUOUS QUERY "immersion_10m_cq" ON "tycoch" BEGIN SELECT mean("batt-temperature") AS "mean_10m_batt-temperature", mean("batt-voltage") AS "mean_10m_batt-voltage", mean("load-current") AS "mean_10m_load-current", mean("power") AS "mean_10m_power", mean("pwm-level") AS "mean_10m_pwm-level"  INTO "forever"."immersion"  FROM "immersion"  GROUP BY time(10m) END
-SELECT mean("batt-temperature") AS "mean_10m_batt-temperature", mean("batt-voltage") AS "mean_10m_batt-voltage", mean("load-current") AS "mean_10m_load-current", mean("power") AS "mean_10m_power", mean("pwm-level") AS "mean_10m_pwm-level"  INTO "forever"."immersion"  FROM "immersion" WHERE time > now() - 24h GROUP BY time(10m)
-
-# pv
-CREATE CONTINUOUS QUERY "pv_1m_cq" ON "tycoch" BEGIN SELECT mean("power-generation") AS "mean_1m_power-generation", mean("batt-voltage") AS "mean_1m_batt-voltage"  INTO "ninetyday"."pv"  FROM "pv"  GROUP BY time(1m) END
-SELECT mean("power-generation") AS "mean_1m_power-generation", mean("batt-voltage") AS "mean_1m_batt-voltage"  INTO "ninetyday"."pv"  FROM "pv" WHERE time > now() - 24h GROUP BY time(1m)
-
-CREATE CONTINUOUS QUERY "pv_10m_cq" ON "tycoch" BEGIN SELECT mean("power-generation") AS "mean_10m_power-generation", mean("batt-voltage") AS "mean_10m_batt-voltage"  INTO "forever"."pv"  FROM "pv"  GROUP BY time(10m) END
-SELECT mean("power-generation") AS "mean_10m_power-generation", mean("batt-voltage") AS "mean_10m_batt-voltage"  INTO "forever"."pv"  FROM "pv" WHERE time > now() - 24h GROUP BY time(10m)
+CREATE CONTINUOUS QUERY "1m_cq" ON "tycoch" BEGIN SELECT mean(*) as "mean_1m" INTO "ninetyday".:MEASUREMENT FROM /.*/ GROUP BY time(1m) END
+CREATE CONTINUOUS QUERY "10m_cq" ON "tycoch" BEGIN SELECT mean(*) as "mean_10m" INTO "forever".:MEASUREMENT FROM /.*/ GROUP BY time(10m) END
