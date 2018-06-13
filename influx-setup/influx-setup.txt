@@ -1,5 +1,5 @@
 # Create the database
-CREATE DATABASE IF NOT EXISTS tycoch
+CREATE DATABASE tycoch
 
 # Set up the retention policies
 CREATE RETENTION POLICY oneday ON tycoch DURATION 1d REPLICATION 1 DEFAULT
