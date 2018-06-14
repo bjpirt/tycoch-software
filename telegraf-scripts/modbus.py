@@ -4,6 +4,10 @@ import ctypes
 import sys
 import os
 import random
+import logging
+#logging.basicConfig()
+#log = logging.getLogger()
+#log.setLevel(logging.DEBUG)
 
 DUMMY = os.path.exists('/boot/dummy')
 
@@ -11,8 +15,10 @@ if not DUMMY:
   from pymodbus.client.sync import ModbusSerialClient as ModbusClient
 
 BOILER_SENSOR = 0x01
-FIRE_SENSOR = 0x02
-TANK_SENSOR = 0x03
+FIRE_SENSOR   = 0x02
+TANK_SENSOR   = 0x03
+RAD_CONTROL   = 0x04
+OCCUPANCY     = 0x05
 
 
 if len(sys.argv) < 2:
@@ -27,6 +33,8 @@ try:
   if not DUMMY:
     client = ModbusClient(method='rtu', port=port, baudrate=57600, timeout=1)
     client.connect()
+    # Needed when debugging using non RS485
+    #time.sleep(2)
 
   #### Read the boiler sensor
   if DUMMY:
@@ -36,7 +44,7 @@ try:
     readings = map(lambda x: ctypes.c_short(x).value * 0.0078125, res.registers)
 
   print("gas-boiler in-temp=%f,out-temp=%f" % (readings[0], readings[1]))
-  print("temperature internal=%f,external=%f" % (readings[2], readings[3]))
+  print("temperature plant=%f,external=%f" % (readings[2], readings[3]))
 
   #### Read the fire sensor
   if DUMMY:
@@ -70,6 +78,20 @@ try:
     total = (total / 4) * 100
     out.append("level=%f" % (total))
     print("thermal-store " + ','.join(out))
+
+  #### Read the house temperature sensors
+  if DUMMY:
+    readings = [r(20,2), r(40,4), r(0, 1), r(0, 1)]
+  else:
+    res = client.read_holding_registers(0, 4, unit=OCCUPANCY)
+    readings = list(map(lambda x: ctypes.c_short(x).value * 0.0078125, res.registers[0:2]))
+
+  print("temperature house-upstairs=%f,house-downstairs=%f" % (readings[0], readings[1]))
+
+  if res.registers[2] > 0 and not DUMMY:
+    # There has been a movement event
+    client.write_register(2, 0, unit=OCCUPANCY)
+    print("occupancy front-door=%d" % int(res.registers[3]))
 
 except:
   sys.exit(0)
