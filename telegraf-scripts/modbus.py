@@ -18,7 +18,6 @@ BOILER_SENSOR = 0x01
 FIRE_SENSOR   = 0x02
 TANK_SENSOR   = 0x03
 RAD_CONTROL   = 0x04
-OCCUPANCY     = 0x05
 
 
 if len(sys.argv) < 2:
@@ -78,20 +77,6 @@ try:
     total = (total / 4) * 100
     out.append("level=%f" % (total))
     print("thermal-store " + ','.join(out))
-
-  #### Read the house temperature sensors
-  if DUMMY:
-    readings = [r(20,2), r(40,4), r(0, 1), r(0, 1)]
-  else:
-    res = client.read_holding_registers(0, 4, unit=OCCUPANCY)
-    readings = list(map(lambda x: ctypes.c_short(x).value * 0.0078125, res.registers[0:2]))
-
-  print("temperature house-upstairs=%f,house-downstairs=%f" % (readings[0], readings[1]))
-
-  if res.registers[2] > 0 and not DUMMY:
-    # There has been a movement event
-    client.write_register(2, 0, unit=OCCUPANCY)
-    print("occupancy front-door=%d" % int(res.registers[3]))
 
 except:
   sys.exit(0)
