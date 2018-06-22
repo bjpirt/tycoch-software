@@ -29,11 +29,11 @@ if not DUMMY:
 #### PV power generation
 if DUMMY:
   gen = r(760, 300)
-  bv = r(56, 3)
+  pv_bv = r(56, 3)
 else:
   gen = client.read_holding_registers(789, 1, unit=245).registers[0]/10.0
   pv_bv = client.read_holding_registers(771, 1, unit=245).registers[0]/100.0
-print("pv power-generation=%f,batt-voltage=%f" % (gen, bv))
+print("pv power-generation=%f,batt-voltage=%f" % (gen, pv_bv))
 
 #### AC Usage
 if DUMMY:
