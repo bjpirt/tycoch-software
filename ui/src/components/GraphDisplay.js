@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import './GraphDisplay.css';
 import GraphData from './GraphData';
 import Graph from './Graph';
-import Plot from 'react-plotly.js';
 
 let hour = 60 * 60 * 1000;
 let day  = 24 * 60 * 60 * 1000;
@@ -68,34 +67,16 @@ class GraphDisplay extends Component {
   }
   
   fetchGraphData(){
-    this.graphData.getThermalStoreData(this.state.startTime, this.state.endTime, data => {
-      this.setState((state, props) => {
-        let graphData = state.graphData
-        graphData.thermalStore = data;
-        return {graphData: graphData};
+    let params = ['thermalStore', 'temperature', 'battery', 'ac_pv']
+    params.forEach(param => {
+      this.graphData.getGraphData(param, this.state.startTime, this.state.endTime, data => {
+        this.setState((state, props) => {
+          let graphData = state.graphData
+          graphData[param] = data;
+          return {graphData: graphData};
+        });
       });
-    });
-    this.graphData.getTempData(this.state.startTime, this.state.endTime, data => {
-      this.setState((state, props) => {
-        let graphData = state.graphData
-        graphData.temperature = data;
-        return {graphData: graphData};
-      });
-    });
-    this.graphData.getBatteryData(this.state.startTime, this.state.endTime, data => {
-      this.setState((state, props) => {
-        let graphData = state.graphData
-        graphData.battery = data;
-        return {graphData: graphData};
-      });
-    });
-    this.graphData.getAcPvData(this.state.startTime, this.state.endTime, data => {
-      this.setState((state, props) => {
-        let graphData = state.graphData
-        graphData.ac_pv = data;
-        return {graphData: graphData};
-      });
-    });
+    })
   }
   
   prevPeriod = () => {
