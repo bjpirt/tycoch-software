@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import './App.css';
 import DataHandler from './DataHandler';
 import MainDisplay from './MainDisplay';
+import GraphDisplay from './GraphDisplay';
+import HelpDisplay from './HelpDisplay';
+import Nav from './Nav';
 
 class App extends Component {
   constructor(props){
@@ -24,14 +27,23 @@ class App extends Component {
           'tank-sensor2': 0,
           'tank-sensor3': 0,
           'tank-sensor4': 0
+        },
+        temperature: {
+          'house-downstairs': 0,
+          'house-upstairs': 0,
+          'external': 0
+        },
+        heating: {
+          'downstairs': 0,
+          'upstairs': 0
         }
-      }
+      },
+      selectedMenu: 1
     }
   }
   
   updateState = (state) => {
     this.setState((prevState) => {
-      console.log(state)
       for(var key in state){
         prevState.data[key] = prevState.data[key] || {};
         for(var subKey in state[key]){
@@ -41,13 +53,24 @@ class App extends Component {
       return prevState;
     });
   }
+  
+  selectMenu = (menuId) => {
+    this.setState({selectedMenu: menuId});
+  }
+  
+  mainScreen(){
+    return [
+      <MainDisplay data={this.state.data} />,
+      <GraphDisplay />,
+      <HelpDisplay />
+    ][this.state.selectedMenu]
+  }
 
   render() {
     return (
       <div className="App">
-        <nav>
-        </nav>
-        <MainDisplay data={this.state.data} />
+        <Nav selected={this.state.selectedMenu} onClick={this.selectMenu} />
+        {this.mainScreen()}
       </div>
     );
   }

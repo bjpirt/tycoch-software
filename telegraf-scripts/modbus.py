@@ -74,7 +74,7 @@ for i in range(0, retries):
     max_temp = 85
     min_temps = [20, 30, 40, 50]
     if DUMMY:
-      readings = [r(30,2), r(40,4), r(60,2), r(70,1)]
+      readings = [r(20,10), r(40,8), r(60,5), r(75,5)]
     else:
       res = client.read_holding_registers(0, 4, unit=TANK_SENSOR)
       readings = map(lambda x: ctypes.c_short(x).value * 0.0078125, res.registers)

@@ -1,0 +1,45 @@
+.electricityDisplay{
+  display:flex;
+  flex-direction: column;
+  flex: 1 0 auto;
+}
+
+.displayBox{
+  flex: 4 1 auto;
+  text-align: center;
+  background: #888;
+  padding:5px;
+}
+
+.panel .displayBox h3{
+  font-size:170%;
+  color:#333;
+}
+
+.displayBox span{
+  font-size:300%;
+  color:#444;
+}
+
+.arrow{
+  flex: 3 0 auto;
+  text-align:center;
+  max-height:60px;
+}
+
+.arrow img{
+  height:60px;
+}
+
+.electricityPanel{
+  display: flex;
+  flex-direction: column;
+}
+
+.electricityPanel h2{
+  flex: 0 0;
+}
+
+.electricityPanel < div{
+  flex: 1 0 100%;
+}

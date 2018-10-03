@@ -1,17 +1,25 @@
 import React, { Component } from 'react';
-import DisplayBox from './DisplayBox';
 import ThermalStoreDisplay from './ThermalStoreDisplay';
+import TemperatureDisplay from './TemperatureDisplay';
+import ElectricityDisplay from './ElectricityDisplay';
+import './MainDisplay.css';
 
 class MainDisplay extends Component {
   render(){
     return (
-      <div className="mainDisplay">
-        <h2>Heating</h2>
-        <ThermalStoreDisplay values={this.props.data['thermal-store']} />
-        <h2>Electricity</h2>
-        <DisplayBox name="Solar Generation" value={this.props.data.pv['power-generation']} />
-        <DisplayBox name="Battery Bank" value={this.props.data.battery['state-of-charge']} />
-        <DisplayBox name="Consumption" value={this.props.data.ac['power-usage']} />
+      <div className="mainDisplay panelContainer">
+        <div className="panel half">
+          <h2>Heating</h2>
+          <ThermalStoreDisplay values={this.props.data['thermal-store']} />
+          <h3>Temperature</h3>
+          <TemperatureDisplay zone="downstairs" temp={this.props.data.temperature['house-downstairs']} state={this.props.data.heating['downstairs']} />
+          <TemperatureDisplay zone="upstairs" temp={this.props.data.temperature['house-upstairs']} state={this.props.data.heating['upstairs']} />
+          <TemperatureDisplay zone="outside" temp={this.props.data.temperature['external']} control={false}/>
+        </div>
+        <div className="panel half electricityPanel">
+          <h2>Electricity</h2>
+          <ElectricityDisplay data={this.props.data}/>
+        </div>
       </div>
     )
   }

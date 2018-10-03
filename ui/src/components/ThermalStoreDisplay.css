@@ -1,0 +1,15 @@
+.thermalStore .diagram{
+  height: 250px;
+  overflow:hidden;
+}
+.thermalStore .diagram p{
+  margin:5px;
+  font-size:24px;
+  color:#FFF;
+  text-align:center;
+}
+.thermalStore .diagram{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}

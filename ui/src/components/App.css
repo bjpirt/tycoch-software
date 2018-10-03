@@ -1,28 +1,103 @@
 .App {
-  text-align: center;
+  height:100vh;
+  width:100%;
+  position:absolute;
+  top:0;
+  left:0;
+  display:flex;
+  background:#444;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+.App nav{
+  background:#222;
+  width:10%;
 }
 
-.App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
+.App .mainDisplay{
+  width:90%;
 }
 
-.App-title {
-  font-size: 1.5em;
+.App nav button{
+  padding:10px;
+  width:100%;
+  border:none;
+  background:#222;
+  outline:none;
 }
 
-.App-intro {
-  font-size: large;
+.App nav button.selected{
+  background:#444;
 }
 
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+.App nav button svg fill{
+  fill:#BBB;
 }
+h3{
+  margin:8px 0;
+}
+
+.panelContainer{
+  flex:1 0;
+  display:flex;
+}
+
+.panel{
+  box-sizing: border-box;
+  background:#666;
+  padding:10px;
+  margin:10px;
+}
+
+.panel.full{
+  width:100%;
+  flex: 1 0;
+  overflow:auto;
+}
+
+.panel.half{
+  flex: 1 0;
+}
+
+.panel h2{
+  margin:0 0 10px;
+  font-size:250%;
+  color:#EEE;
+}
+
+.panel h3{
+  color:#CCC;
+}
+
+.panel.half{
+  margin:10px 10px 10px 5px;
+}
+
+.panel.half:first-child{
+  margin:10px 5px 10px 10px;
+}
+
+button{
+  padding:10px;
+  flex: 1 1;
+  background:#0A0;
+  border:none;
+  border-bottom:3px solid #080;
+  color:#FFF;
+  font-weight: bold;
+  margin:2px;
+  font-size:18px;
+}
+
+button.deselected{
+  background:#AAA;
+}
+
+button:active{
+  background:#080;
+  border-bottom:3px solid #060;
+}
+
+button:disabled{
+  background:#AAA;
+}
+

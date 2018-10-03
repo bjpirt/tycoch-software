@@ -1,0 +1,23 @@
+.graphDisplay .tabs button{
+  margin-right:10px;
+}
+
+.graphDisplay .tabs{
+  margin:0 0 10px 0;
+  text-align:center;
+}
+
+.graphDisplay .graphList{
+  overflow:auto;
+}
+
+.graphDisplay .duration{
+  text-align:center;
+  color:#BBB;
+}
+
+.graphDisplay h2{
+  font-size: 180%;
+  margin-top: 10px;
+  color:#CCC;
+}
