@@ -68,92 +68,34 @@ class GraphDisplay extends Component {
   }
   
   fetchGraphData(){
-    this.graphData.getThermalStoreData(this.state.startTime, this.state.endTime)
-      .then((json) => {
-        console.log(json)
-        if(json.results && json.results[0] && json.results[0].series && json.results[0].series[0] && json.results[0].series[0].values){
-          this.setState((state, props) => {
-            let graphData = state.graphData
-            graphData.thermalStore = {
-              times:   json.results[0].series[0].values.map(x => new Date(x[0])),
-              sensor1: json.results[0].series[0].values.map(x => x[1]),
-              sensor2: json.results[0].series[0].values.map(x => x[2]),
-              sensor3: json.results[0].series[0].values.map(x => x[3]),
-              sensor4: json.results[0].series[0].values.map(x => x[4])
-            }
-            return {graphData: graphData};
-          })
-        }else{
-          this.setState((state, props) => {
-            let graphData = state.graphData
-            graphData.thermalStore = {times: [],sensor1: [], sensor2: [], sensor3: [], sensor4: []}
-            return {graphData: graphData};
-          });
-        }
-      })
-    this.graphData.getAcPvData(this.state.startTime, this.state.endTime)
-      .then((json) => {
-        console.log(json)
-        if(json.results && json.results[0] && json.results[0].series && json.results[0].series[0] && json.results[0].series[0].values){
-          this.setState((state, props) => {
-            let graphData = state.graphData
-            graphData.ac_pv = {
-              times:   json.results[0].series[0].values.map(x => new Date(x[0])),
-              ac: json.results[0].series[0].values.map(x => x[1]),
-              pv: json.results[0].series[1].values.map(x => x[2])
-            }
-            return {graphData: graphData};
-          })
-        }else{
-          this.setState((state, props) => {
-            let graphData = state.graphData
-            graphData.ac_pv = {ac_pv: {times: [], ac: [], pv: []}};
-            return {graphData: graphData};
-          })
-        }
-      })
-    this.graphData.getTempData(this.state.startTime, this.state.endTime)
-      .then((json) => {
-        console.log(json)
-        if(json.results && json.results[0] && json.results[0].series && json.results[0].series[0] && json.results[0].series[0].values){
-          this.setState((state, props) => {
-            let graphData = state.graphData
-            graphData.temperature = {
-              times:   json.results[0].series[0].values.map(x => new Date(x[0])),
-              external: json.results[0].series[0].values.map(x => x[1]),
-              house_downstairs: json.results[0].series[0].values.map(x => x[2]),
-              house_upstairs: json.results[0].series[0].values.map(x => x[3])
-            }
-            return {graphData: graphData};
-          })
-        }else{
-          this.setState((state, props) => {
-            let graphData = state.graphData
-            graphData.temperature = {times: [],external: [], house_downstairs: [], house_upstairs: []}
-            return {graphData: graphData};
-          });
-        }
-      })
-    this.graphData.getBatteryData(this.state.startTime, this.state.endTime)
-      .then((json) => {
-        console.log(json)
-        if(json.results && json.results[0] && json.results[0].series && json.results[0].series[0] && json.results[0].series[0].values){
-          this.setState((state, props) => {
-            let graphData = state.graphData
-            graphData.battery = {
-              times:   json.results[0].series[0].values.map(x => new Date(x[0])),
-              state_of_charge: json.results[0].series[0].values.map(x => x[1])
-            }
-            return {graphData: graphData};
-          })
-        }else{
-          this.setState((state, props) => {
-            let graphData = state.graphData
-            graphData.battery = {times: [],state_of_charge: []}
-            return {graphData: graphData};
-          });
-        }
-      })
+    this.graphData.getThermalStoreData(this.state.startTime, this.state.endTime, data => {
+      this.setState((state, props) => {
+        let graphData = state.graphData
+        graphData.thermalStore = data;
+        return {graphData: graphData};
+      });
+    });
+    this.graphData.getTempData(this.state.startTime, this.state.endTime, data => {
+      this.setState((state, props) => {
+        let graphData = state.graphData
+        graphData.temperature = data;
+        return {graphData: graphData};
+      });
+    });
+    this.graphData.getBatteryData(this.state.startTime, this.state.endTime, data => {
+      this.setState((state, props) => {
+        let graphData = state.graphData
+        graphData.battery = data;
+        return {graphData: graphData};
+      });
+    });
+    this.graphData.getAcPvData(this.state.startTime, this.state.endTime, data => {
+      this.setState((state, props) => {
+        let graphData = state.graphData
+        graphData.ac_pv = data;
+        return {graphData: graphData};
+      });
+    });
   }
   
   prevPeriod = () => {
