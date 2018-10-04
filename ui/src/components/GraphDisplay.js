@@ -10,6 +10,7 @@ class GraphDisplay extends Component {
   constructor(props){
     super(props);
     this.graphData = new GraphData();
+    this.updateTimer = null;
     this.state = {
       duration: 'day',
       startTime: null,
@@ -22,13 +23,17 @@ class GraphDisplay extends Component {
       }
     }
   }
-  
-  componentDidMount(){
+
+  init(){
     this.setTimes(new Date(), _=>{
       this.fetchGraphData();
     })
   }
   
+  componentDidMount(){
+    this.init();
+  }
+
   setGraphDuration(duration){
     if(duration !== this.state.duration){
       this.setState({duration: duration}, _ => {
@@ -43,6 +48,13 @@ class GraphDisplay extends Component {
     return (duration === this.state.duration ? '' : 'deselected');
   }
   
+  initUpdate(){
+    if(this.lastPage()){
+      if(this.updateTimer) window.clearTimeout(this.updateTimer);
+      this.updateTimer = window.setTimeout(this.init.bind(this), this.graphData.getResolution(this.state.startTime, this.state.endTime) * 1000);
+    }
+  }
+
   setTimes(now, cb){
     let start, end;
     if(this.state.duration === 'hour'){
@@ -63,7 +75,10 @@ class GraphDisplay extends Component {
       start = now.getTime() - (now.getTime() % day);
       end = start + (daysInMonth * day);
     }
-    this.setState({startTime: start, endTime: end, st: new Date(start), et: new Date(end)}, cb);
+    this.setState({startTime: start, endTime: end, st: new Date(start), et: new Date(end)}, _ => {
+      this.initUpdate();
+      cb()
+    });
   }
   
   fetchGraphData(){

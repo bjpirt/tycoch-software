@@ -61,7 +61,7 @@ class GraphData{
     start /= 1000;
     end /= 1000;
     let res = (end - start) / values;
-    return `${res}s`
+    return res
   }
   
   getGraphData(type, start, end, cb){
@@ -73,7 +73,7 @@ class GraphData{
       battery: `mean("${prefix}state-of-charge") as "state_of_charge" FROM "tycoch"."${rp}"."battery"`,
       ac_pv: `mean("${prefix}power-usage") as "ac", mean("${prefix}power-generation") as "pv" FROM "tycoch"."${rp}"."ac", "tycoch"."${rp}"."pv"`
     }
-    let query = `SELECT ${fields[type]} WHERE time > ${start * 1000000} AND time < ${end * 1000000} GROUP BY time(${this.getResolution(start, end)}) FILL(none)`
+    let query = `SELECT ${fields[type]} WHERE time > ${start * 1000000} AND time < ${end * 1000000} GROUP BY time(${this.getResolution(start, end)}s) FILL(none)`
     return this.getData(query, cb);
   }
 }

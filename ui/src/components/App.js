@@ -38,7 +38,7 @@ class App extends Component {
           'upstairs': 0
         }
       },
-      selectedMenu: 1
+      selectedMenu: 0
     }
   }
   
