@@ -28,7 +28,7 @@ if not DUMMY:
 
 #### PV power generation
 if DUMMY:
-  gen = r(760, 300)
+  gen = r(1760, 300)
   pv_bv = r(56, 3)
 else:
   gen = client.read_holding_registers(789, 1, unit=245).registers[0]/10.0

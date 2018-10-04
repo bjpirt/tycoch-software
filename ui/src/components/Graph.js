@@ -27,18 +27,35 @@ class Graph extends Component {
       paper_bgcolor: 'transparent',
       plot_bgcolor: 'rgba(255,255,255,0.1)',
       margin: {
-        l: 40,
+        l: 50,
         r: 20,
         b: 40,
         t: 0,
         pad: 0
       },
       legend: {
-        orientation: 'h'
+        orientation: 'h',
+        font: {
+          color:'#CCC'
+        }
       },
       xaxis: {
         range: this.props.x_range,
-        type: 'date'
+        type: 'date',
+        gridcolor:'#888',
+        tickfont: {
+          color:'#CCC'
+        }
+      },
+      yaxis: {
+        gridcolor:'#888',
+        tickfont: {
+          color:'#CCC'
+        },
+        titlefont: {
+          color:'#CCC'
+        },
+        title: this.props.y_title
       }
     }
     if(this.props.range){
@@ -50,7 +67,6 @@ class Graph extends Component {
   render(){
     return <Plot
               data={this.data()}
-              responsive={true}
               layout={this.layout()}
               config={{
                 displayModeBar: false,

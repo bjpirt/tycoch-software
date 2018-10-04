@@ -11,7 +11,7 @@ class GraphDisplay extends Component {
     super(props);
     this.graphData = new GraphData();
     this.state = {
-      duration: 'hour',
+      duration: 'day',
       startTime: null,
       endTime: null,
       graphData: {
@@ -144,26 +144,27 @@ class GraphDisplay extends Component {
             <h2>Thermal Store Temperatures</h2>
             <Graph
               times={this.state.graphData.thermalStore.times}
+              y_title="&deg;C"
               data={[
                 {
                   values: this.state.graphData.thermalStore.sensor4,
                   name: 'Sensor 4',
-                  color: '#FF0'
+                  color: '#F25119'
                 },
                 {
                   values: this.state.graphData.thermalStore.sensor3,
                   name: 'Sensor 3',
-                  color: '#0F0'
+                  color: '#F28519'
                 },
                 {
                   values: this.state.graphData.thermalStore.sensor2,
                   name: 'Sensor 2',
-                  color: '#0FF'
+                  color: '#F2B919'
                 },
                 {
                   values: this.state.graphData.thermalStore.sensor1,
                   name: 'Sensor 1',
-                  color: '#00F'
+                  color: '#F2F219'
                 }
               ]}
               x_range={[this.state.startTime, this.state.endTime]}
@@ -172,16 +173,17 @@ class GraphDisplay extends Component {
             <h2>Electricity Usage vs Generation</h2>
             <Graph
               times={this.state.graphData.ac_pv.times}
+              y_title="Watts"
               data={[
                 {
                   values: this.state.graphData.ac_pv.pv,
                   name: 'PV Generation',
-                  color: '#0FF'
+                  color: '#FFC200'
                 },
                 {
                   values: this.state.graphData.ac_pv.ac,
                   name: 'AC Consumption',
-                  color: '#0F0'
+                  color: '#FF008C'
                 }
               ]}
               x_range={[this.state.startTime, this.state.endTime]} 
@@ -189,21 +191,22 @@ class GraphDisplay extends Component {
             <h2>Temperature</h2>
             <Graph
               times={this.state.graphData.temperature.times}
+              y_title="&deg;C"
               data={[
                 {
-                  values: this.state.graphData.temperature.external,
-                  name: 'External',
-                  color: '#0FF'
+                  values: this.state.graphData.temperature.house_upstairs,
+                  name: 'Upstairs',
+                  color: '#A84AE5'
                 },
                 {
                   values: this.state.graphData.temperature.house_downstairs,
                   name: 'Downstairs',
-                  color: '#0F0'
+                  color: '#4A59E5'
                 },
                 {
-                  values: this.state.graphData.temperature.house_upstairs,
-                  name: 'Upstairs',
-                  color: '#FF0'
+                  values: this.state.graphData.temperature.external,
+                  name: 'External',
+                  color: '#4AE593'
                 }
               ]}
               x_range={[this.state.startTime, this.state.endTime]} 
@@ -211,11 +214,12 @@ class GraphDisplay extends Component {
             <h2>Battery Level</h2>
             <Graph
               times={this.state.graphData.battery.times}
+              y_title="%"
               data={[
                 {
                   values: this.state.graphData.battery.state_of_charge,
                   name: 'Battery Charge Level',
-                  color: '#0FF'
+                  color: '#4AE56B'
                 }
               ]}
               x_range={[this.state.startTime, this.state.endTime]} 
