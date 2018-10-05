@@ -9,8 +9,7 @@ class HelpDisplay extends Component {
           <h2>Help with the system</h2>
           <p>Ty Coch is off-grid and has a large system of renewables in place to provide
           power and heat. The system is quite complex and we have provided this display so
-          that you can see what is going on with it. This can be useful in helping you
-          choose when to do things like putting on the washing machine or dishwasher.</p>
+          that you can see what is going on with it.</p>
           <h3>Heating</h3>
           <p>In the barn next door is a large thermal store, which acts like a battery for
           heat energy. This gets charged up from a few different sources; solar panels on

@@ -30,7 +30,7 @@ class Graph extends Component {
         l: 50,
         r: 20,
         b: 40,
-        t: 0,
+        t: 5,
         pad: 0
       },
       legend: {
