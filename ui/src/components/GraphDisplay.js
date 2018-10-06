@@ -11,16 +11,17 @@ class GraphDisplay extends Component {
     super(props);
     this.graphData = new GraphData();
     this.updateTimer = null;
+    this.defaultGraphData = {
+      thermalStore: {times:[], sensor1:[], sensor2:[], sensor3:[], sensor4:[]},
+      ac_pv: {times:[], ac:[], pv:[]},
+      temperature: {times:[], external:[], house_downstairs:[], house_upstairs:[]},
+      battery: {times:[], state_of_charge:[]}
+    }
     this.state = {
       duration: 'day',
       startTime: null,
       endTime: null,
-      graphData: {
-        thermalStore: {times:[], sensor1:[], sensor2:[], sensor3:[], sensor4:[]}, 
-        ac_pv: {times:[], ac:[], pv:[]}, 
-        temperature: {times:[], external:[], house_downstairs:[], house_upstairs:[]},
-        battery: {times:[], state_of_charge:[]}
-      }
+      graphData: this.defaultGraphData
     }
   }
 
@@ -87,7 +88,11 @@ class GraphDisplay extends Component {
       this.graphData.getGraphData(param, this.state.startTime, this.state.endTime, data => {
         this.setState((state, props) => {
           let graphData = state.graphData
-          graphData[param] = data;
+          if(data){
+            graphData[param] = data;
+          }else{
+            graphData[param] = this.defaultGraphData[param];
+          }
           return {graphData: graphData};
         });
       });
