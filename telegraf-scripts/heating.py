@@ -92,7 +92,7 @@ for i in range(0,3):
       registers = [int(r(1200,200)), int(r(2000,400)), r(0, 1), r(0,1), r(0, 1), r(0, 1), r(0, 1)]
     else:
       registers = client.read_holding_registers(0, 7, unit=HEATING).registers
-    downstairs_temp, upstairs_temp = list(map(lambda x: ctypes.c_short(x).value * 0.0078125, registers[0:2]))
+    upstairs_temp, downstairs_temp = list(map(lambda x: ctypes.c_short(x).value * 0.0078125, registers[0:2]))
 
     print("temperature house-downstairs=%f,house-upstairs=%f" % (downstairs_temp, upstairs_temp))
     break
