@@ -85,6 +85,10 @@ try:
 except:
   exit(0)
 
+result = query_influx('select count("power-usage") from "tycoch"."oneday"."ac" where "power-usage" > 200 and "power-usage" < 900')
+occupied = "series" in result
+print("heating occupied=%d" % int(occupied))
+
 for i in range(0,3):
   try:
     #### Read the house temperature sensors
@@ -92,26 +96,8 @@ for i in range(0,3):
       registers = [int(r(1200,200)), int(r(2000,400)), r(0, 1), r(0,1), r(0, 1), r(0, 1), r(0, 1)]
     else:
       registers = client.read_holding_registers(0, 7, unit=HEATING).registers
+
     upstairs_temp, downstairs_temp = list(map(lambda x: ctypes.c_short(x).value * 0.0078125, registers[0:2]))
-
-    print("temperature house-downstairs=%f,house-upstairs=%f" % (downstairs_temp, upstairs_temp))
-    break
-  except:
-    pass
-    
-for i in range(0,3):
-  try:
-    occupied = False
-    if registers[4] > 0:
-      # There has been a movement event
-      occupied = True
-      client.write_register(4, 0, unit=HEATING)
-      print("occupancy front-door=%d" % int(registers[3]))
-    else:
-      # Read last occupancy value from influx
-      result = query_influx('SELECT count("front-door") FROM "tycoch"."oneday"."occupancy" WHERE time > now() - 24h')
-      occupied = "series" in result
-
     downstairs_heating = calculate_heating_state('downstairs', downstairs_temp, registers[5], occupied)
     upstairs_heating = calculate_heating_state('upstairs', upstairs_temp, registers[6], occupied)
 
@@ -120,6 +106,8 @@ for i in range(0,3):
       client.write_registers(5, [downstairs_heating, upstairs_heating], unit=HEATING)
       
     print("heating downstairs=%d,upstairs=%d" % (downstairs_heating, upstairs_heating))
+
+    print("temperature house-downstairs=%f,house-upstairs=%f" % (downstairs_temp, upstairs_temp))
     break
   except:
     pass
