@@ -6,7 +6,7 @@ class ThermalStoreDisplay extends Component {
     let max = 80;
     let min = 25;
     let mid = min + (max - min)/2;
-    let maxCol =    [255, 44,  61];
+    let maxCol = [255, 44,  61];
     let midCol = [140, 112, 157];
     let minCol = [25,  180, 254];
     
@@ -27,14 +27,14 @@ class ThermalStoreDisplay extends Component {
         return blend(midCol, minCol, mid, min, temp);
       }
     }
-    
-    return `linear-gradient(to bottom, rgb(${calculateColor(this.props.values['tank-sensor4']).join(',')}) 0%, rgb(${calculateColor(this.props.values['tank-sensor3']).join(',')}) 33%, rgb(${calculateColor(this.props.values['tank-sensor2']).join(',')}) 66%, rgb(${calculateColor(this.props.values['tank-sensor1']).join(',')}) 100%)`
+    let css = `linear-gradient(to top, rgb(${calculateColor(this.props.values['tank-sensor1']).join(',')}) 0%, rgb(${calculateColor(this.props.values['tank-sensor2']).join(',')}) 33%, rgb(${calculateColor(this.props.values['tank-sensor3']).join(',')}) 66%, rgb(${calculateColor(this.props.values['tank-sensor4']).join(',')}) 100%)`;
+    console.log(css);
+    return css;
   }
 
   render(){
     return (
       <div className="thermalStore">
-        <h3>Thermal Store</h3>
         <div className="diagram" style={{backgroundImage: this.linearGradient()}}>
           <p>{this.props.values['tank-sensor4'].toFixed(1)}&deg;C</p>
           <p>{this.props.values['tank-sensor3'].toFixed(1)}&deg;C</p>

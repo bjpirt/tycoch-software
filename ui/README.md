@@ -4,6 +4,8 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 mosquitto -c /usr/local/etc/mosquitto/mosquitto.conf
 influxd -config /usr/local/etc/influxdb.conf
+telegraf -config /usr/local/etc/telegraf.conf
+npm start
 
 
 Below you will find some information on how to perform common tasks.<br>

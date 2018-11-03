@@ -70,7 +70,7 @@ class App extends Component {
     return (
       <div className="App">
         <Nav selected={this.state.selectedMenu} onClick={this.selectMenu} />
-        <HelpDisplay />
+        {this.mainScreen()}
       </div>
     );
   }

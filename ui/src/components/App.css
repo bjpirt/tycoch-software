@@ -10,7 +10,9 @@
 
 .App nav{
   background:#222;
-  width:10%;
+  width:90px;
+  height:100%;
+  vertical-align:top;
 }
 
 .App .mainDisplay{
@@ -89,7 +91,6 @@ button{
   border-bottom:3px solid #080;
   color:#FFF;
   font-weight: bold;
-  margin:2px;
   font-size:18px;
 }
 
@@ -104,5 +105,26 @@ button:active{
 
 button:disabled{
   background:#AAA;
+}
+
+.heatingPanel{
+  display:flex;
+  flex-direction:column;
+}
+
+.heatingPanel > *{
+  flex: 1 0;
+}
+
+.heatingPanel > h2, .heatingPanel > h3{
+  flex: 0 0;
+}
+
+.heatingPanel > .temperatureDisplay{
+  flex: 1 0;
+}
+
+.heatingPanel > .thermalStore{
+  flex: 4 0;
 }
 

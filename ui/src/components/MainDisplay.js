@@ -8,8 +8,9 @@ class MainDisplay extends Component {
   render(){
     return (
       <div className="mainDisplay panelContainer">
-        <div className="panel half">
-          <h2>Heating</h2>
+        <div className="panel half heatingPanel">
+          <h2>Heating</h2>          
+          <h3>Thermal Store</h3>
           <ThermalStoreDisplay values={this.props.data['thermal-store']} />
           <h3>Temperature</h3>
           <TemperatureDisplay zone="downstairs" temp={this.props.data.temperature['house-downstairs']} state={this.props.data.heating['downstairs']} />

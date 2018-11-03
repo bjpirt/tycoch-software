@@ -3,7 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "babel-polyfill": "^6.26.0",
+    "install": "^0.12.1",
     "mqtt": "^2.18.1",
+    "npm": "^6.4.1",
     "plotly.js": "^1.41.3",
     "pondjs": "^0.8.9",
     "react": "^16.4.1",

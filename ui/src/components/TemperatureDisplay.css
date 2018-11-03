@@ -2,12 +2,11 @@
   display:flex;
   background:#888;
   padding:0;
-  margin:3px 0;
+  margin:6px 0;
   color:#FFF;
 }
 
 .temperatureDisplay > *{
-  margin:5px;
   font-size:18px;
   padding:10px 5px;
   flex: 1 1;
