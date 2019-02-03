@@ -57,5 +57,12 @@ else:
   soc = res2.registers[0]/10.0
 print("battery voltage=%f,current=%f,state-of-charge=%f" % (bv, current, soc))
 
+#### Generator Input
+if DUMMY:
+  res = r(800, 900)
+else:
+  res = client.read_holding_registers(12, 4, unit=246).registers[0] * 10
+print("ac generator-input=%f" % (res))
+
 #except:
 #  sys.exit(1)
