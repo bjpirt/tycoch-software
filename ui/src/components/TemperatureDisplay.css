@@ -7,7 +7,7 @@
 }
 
 .temperatureDisplay > *{
-  font-size:18px;
+  font-size:150%;
   padding:10px 5px;
   flex: 1 1;
   display:block;

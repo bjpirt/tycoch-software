@@ -23,7 +23,7 @@ class Graph extends Component {
   layout(){
     let layout = {
       height: 300,
-      width: 800,
+      autosize:true,
       paper_bgcolor: 'transparent',
       plot_bgcolor: 'rgba(255,255,255,0.1)',
       margin: {
@@ -65,15 +65,19 @@ class Graph extends Component {
   }
   
   render(){
-    return <Plot
-              data={this.data()}
-              layout={this.layout()}
-              config={{
-                displayModeBar: false,
-                staticPlot: true,
-                responsive: true
-              }}
-            />
+    return <div className="graph">
+      <h2>{this.props.title}</h2>
+      <Plot
+        data={this.data()}
+        layout={this.layout()}
+        config={{
+          displayModeBar: false,
+          staticPlot: true,
+          responsive: true
+        }}
+        style={{width: "100%"}}
+      />
+    </div>
   }
 }
 

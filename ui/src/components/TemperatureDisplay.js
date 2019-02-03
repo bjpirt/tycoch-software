@@ -3,15 +3,15 @@ import './TemperatureDisplay.css';
 
 class TemperatureDisplay extends Component {
   boost = () => {
-    console.log("Boost " + this.props.zone)
+    console.log("Boosting " + this.props.zone)
     let data = `heating ${this.props.zone}-boost=1`;
     let url = `http://${window.location.host.split(':')[0]}:8086/write?db=tycoch&precision=s`;
     fetch(url, {
-      method: 'GET',
+      method: 'POST',
       body: data
-    }).then(() => {
-      console.log('success');
-    })
+    }).catch(function(err) {
+      console.log('Fetch Error', err);
+    });
   }
   
   controlElement(){

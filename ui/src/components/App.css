@@ -10,7 +10,7 @@
 
 .App nav{
   background:#222;
-  width:90px;
+  width:10%;
   height:100%;
   vertical-align:top;
 }
@@ -91,7 +91,7 @@ button{
   border-bottom:3px solid #080;
   color:#FFF;
   font-weight: bold;
-  font-size:18px;
+  font-size:150%;
 }
 
 button.deselected{
@@ -126,5 +126,11 @@ button:disabled{
 
 .heatingPanel > .thermalStore{
   flex: 4 0;
+}
+
+@media screen and ( max-height: 400px ){
+  body{
+    font-size:60%;
+  }
 }
 

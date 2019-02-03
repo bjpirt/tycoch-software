@@ -161,8 +161,8 @@ class GraphDisplay extends Component {
           </div>
           <div className="graphList">
             <div className="duration">{duration()}</div>
-            <h2>Thermal Store Temperatures</h2>
             <Graph
+              title="Thermal Store Temperatures"
               times={this.state.graphData.thermalStore.times}
               y_title="&deg;C"
               data={[
@@ -190,8 +190,8 @@ class GraphDisplay extends Component {
               x_range={[this.state.startTime, this.state.endTime]}
               y_range={[0, 90]}
             />
-            <h2>Electricity Usage vs Generation</h2>
             <Graph
+              title="Electricity Usage vs Generation"
               times={this.state.graphData.ac_pv.times}
               y_title="Watts"
               data={[
@@ -208,8 +208,8 @@ class GraphDisplay extends Component {
               ]}
               x_range={[this.state.startTime, this.state.endTime]} 
             />
-            <h2>Temperature</h2>
             <Graph
+              title="Temperature"
               times={this.state.graphData.temperature.times}
               y_title="&deg;C"
               data={[
@@ -231,8 +231,8 @@ class GraphDisplay extends Component {
               ]}
               x_range={[this.state.startTime, this.state.endTime]} 
             />
-            <h2>Battery Level</h2>
             <Graph
+              title="Battery Level"
               times={this.state.graphData.battery.times}
               y_title="%"
               data={[
