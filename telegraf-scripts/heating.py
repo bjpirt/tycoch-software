@@ -22,20 +22,20 @@ RELAY_OFFSET = 4
 
 timetable = {
   'downstairs': [
-    ['07:00', 18],
-    ['10:00', 16],
+    ['06:00', 18],
+    ['10:30', 15],
     ['18:00', 18],
     ['22:00', 12]
   ],
   'upstairs': [
     ['06:00', 16],
     ['09:00', 13],
-    ['20:00', 16],
-    ['22:00', 13]
+    ['20:00', 18],
+    ['23:00', 14]
   ]
 }
 boost_temp = 20
-off_temp = 12
+off_temp = 8
 upper_hysteresis = 0.5
 lower_hysteresis = 1.0
 
@@ -59,9 +59,6 @@ def query_influx(q):
   return json.loads(result)['results'][0]
 
 def get_current_set_temp(zone):
-  #return 8
-  #return 20
-  #return {'upstairs': 18, 'downstairs': 8}[zone]
   current_time = time.strftime('%H:%M')
   fill_t = timetable[zone][-1][1]
   for t in timetable[zone]:
@@ -72,18 +69,20 @@ def get_current_set_temp(zone):
       fill_t = t[1]
   return fill_t
 
-def calculate_heating_state(zone, current_temp, current_state, occupied):
-  #if zone == 'downstairs':
-  #  return 0
-  desired_temp = off_temp
-  # Read the boost values from influx
-  boost = "series" in query_influx('SELECT last("' + zone + '-boost") FROM "tycoch"."oneday"."heating" WHERE time > now() - 1h')
+def get_desired_temp(zone, occupied):
+  #return {'upstairs': 18, 'downstairs': 8}[zone]
   if occupied:
+    # Read the boost values from influx
+    boost = "series" in query_influx('SELECT last("' + zone + '-boost") FROM "tycoch"."oneday"."heating" WHERE time > now() - 1h')
     if boost:
-      desired_temp = boost_temp
+      return boost_temp
     else:
-      desired_temp = get_current_set_temp(zone)
+      return get_current_set_temp(zone)
+  else:
+    return off_temp
 
+def calculate_heating_state(zone, current_temp, current_state, occupied):
+  desired_temp = get_desired_temp(zone, occupied)
   if current_temp <= (desired_temp - lower_hysteresis):
     return 1
   elif current_temp >= (desired_temp + upper_hysteresis):
@@ -104,6 +103,7 @@ except:
 result = query_influx('select count("power-usage") from "tycoch"."oneday"."ac" where "power-usage" > 200 and "power-usage" < 900')
 occupied = "series" in result
 print("heating occupied=%d" % int(occupied))
+#occupied = False
 
 for i in range(0,3):
   try:
@@ -125,7 +125,7 @@ for i in range(0,3):
 
     print("heating downstairs=%d,upstairs=%d" % (downstairs_heating, upstairs_heating))
     print("temperature house-downstairs=%f,house-upstairs=%f" % (downstairs_temp, upstairs_temp))
-    print("temperature house-downstairs-set-temp=%f,house-upstairs-set-temp=%f" % (get_current_set_temp('downstairs'), get_current_set_temp('upstairs')))
+    print("temperature house-downstairs-set-temp=%f,house-upstairs-set-temp=%f" % (get_desired_temp('downstairs', occupied), get_desired_temp('upstairs', occupied)))
     break
   except:
     pass
