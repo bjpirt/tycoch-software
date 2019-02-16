@@ -49,7 +49,7 @@ print("ac power-usage=%f,batt-voltage=%f" % (power, ac_bv))
 if DUMMY:
   bv = r(56, 3)
   current = r(20, 5)
-  soc = r(90, 10)
+  soc = r(95, 5)
 else:
   bv = client.read_holding_registers(259, 3, unit=247).registers[0]/100.0
   res2 = client.read_holding_registers(266, 1, unit=247)
