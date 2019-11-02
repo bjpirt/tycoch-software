@@ -13,8 +13,8 @@ class MainDisplay extends Component {
           <h3>Thermal Store</h3>
           <ThermalStoreDisplay values={this.props.data['thermal-store']} />
           <h3>Temperature</h3>
-          <TemperatureDisplay zone="downstairs" temp={this.props.data.temperature['house-downstairs']} state={this.props.data.heating['downstairs']} />
-          <TemperatureDisplay zone="upstairs" temp={this.props.data.temperature['house-upstairs']} state={this.props.data.heating['upstairs']} />
+          <TemperatureDisplay zone="downstairs" temp={this.props.data.temperature['house-downstairs']} state={this.props.data.heating['downstairs-state']} />
+          <TemperatureDisplay zone="upstairs" temp={this.props.data.temperature['house-upstairs']} state={this.props.data.heating['upstairs-state']} />
           <TemperatureDisplay zone="outside" temp={this.props.data.temperature['external']} control={false}/>
         </div>
         <div className="panel half electricityPanel">

@@ -34,8 +34,8 @@ class App extends Component {
           'external': 0
         },
         heating: {
-          'downstairs': 0,
-          'upstairs': 0
+          'downstairs-state': 0,
+          'upstairs-state': 0
         }
       },
       selectedMenu: 0
