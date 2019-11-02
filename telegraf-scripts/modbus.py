@@ -97,16 +97,52 @@ for i in range(0, retries):
   except:
     pass
 
-#for i in range(0, retries):
-#  try:
-#    #### Read the house temperature sensors
-#    if DUMMY:
-#      readings = [r(20,2), r(40,4), r(0, 1), r(0, 1)]
-#    else:
-#      res = client.read_holding_registers(0, 4, unit=HEATING)
-#      readings = list(map(lambda x: ctypes.c_short(x).value * 0.0078125, res.registers[0:2]))
-#  
-#    print("temperature house-upstairs=%f,house-downstairs=%f" % (readings[0], readings[1]))
-#    break
-#  except:
-#    pass
+def unpackDate(date):
+  year = (date >> 9)  & 0b01111111;
+  month = (date >> 5) & 0b00001111;
+  day = (date)        & 0b00011111;
+  return (day, month, year)
+
+def setHeatingTime(client):
+  # Set time
+  t = datetime.datetime.now()
+  intTime = t.hour*60 + t.minute
+  client.write_register(17, intTime, unit=HEATING)
+
+  intDate = ((t.year % 100) << 9) | ((t.month) << 5) | t.day
+  client.write_register(18, intDate, unit=HEATING)
+
+#setHeatingTime(client)
+
+for i in range(0, retries):
+  #### Read the heating controller
+  try:
+    if DUMMY:
+      tempsReadings = [r(20,2), r(20,2), r(20,2), r(20,2)]
+      otherReadings = [int(r(16,6)), int(r(16,6)),
+                       int(r(0,1)), int(r(0,1)),
+                       int(r(0,1)), int(r(0,1)),
+                       0, 0,
+                       1,
+                       120, 120, 0,
+                       0]
+    else:
+      res = client.read_holding_registers(0, 17, unit=HEATING)
+      tempsReadings = list(map(lambda x: ctypes.c_short(x).value * 0.0078125, res.registers[0:4]))
+      otherReadings = list(map(lambda x: ctypes.c_ushort(x).value, res.registers[4:]))
+
+    print("temperature house-downstairs=%f,house-upstairs=%f,backup=%f,rtc=%f" % (tempsReadings[0], tempsReadings[1], tempsReadings[2], tempsReadings[3]))
+    print("heating downstairs-set-temp=%f,upstairs-set-temp=%f" % (otherReadings[0], otherReadings[1]))
+    print("heating downstairs-state=%d,upstairs-state=%d" % (otherReadings[2], otherReadings[3]))
+    print("heating downstairs-boost=%d,upstairs-boost=%d" % (otherReadings[4], otherReadings[5]))
+    print("heating downstairs-off-override=%d,upstairs-off-override=%d" % (otherReadings[6], otherReadings[7]))
+    print("heating occupied=%d" % int(otherReadings[8]))
+    print("heating utctime=%d" % (otherReadings[9]))
+    print("heating localtime=%d" % (otherReadings[9]))
+    #print("heating utctime=%d:%d" % ((int(otherReadings[9])/60), int(otherReadings[9])%60))
+    #print("heating localtime=%d:%d" % ((int(otherReadings[10])/60), int(otherReadings[10])%60))
+    #print("heating date=%d/%d/20%d" % unpackDate(otherReadings[11]))
+    print("errors heating=%d" % otherReadings[12])
+    break
+  except:
+    pass
