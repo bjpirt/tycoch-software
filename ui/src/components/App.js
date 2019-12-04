@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import './App.css';
-import DataHandler from './DataHandler';
+import DataHandler from '../lib/DataHandler';
 import MainDisplay from './MainDisplay';
+import HeatingDisplay from './HeatingDisplay';
 import GraphDisplay from './GraphDisplay';
 import HelpDisplay from './HelpDisplay';
+import DefaultStateData from '../lib/DefaultStateData.json'
 import Nav from './Nav';
 
 class App extends Component {
@@ -12,32 +14,7 @@ class App extends Component {
     this.dataHandler = new DataHandler();
     this.dataHandler.onChange = this.updateState;
     this.state = {
-      data: {
-        pv: {
-          'power-generation': 0
-        },
-        battery: {
-          'state-of-charge': 0
-        },
-        ac: {
-          'power-usage': 0
-        },
-        'thermal-store': {
-          'tank-sensor1': 0,
-          'tank-sensor2': 0,
-          'tank-sensor3': 0,
-          'tank-sensor4': 0
-        },
-        temperature: {
-          'house-downstairs': 0,
-          'house-upstairs': 0,
-          'external': 0
-        },
-        heating: {
-          'downstairs-state': 0,
-          'upstairs-state': 0
-        }
-      },
+      data: DefaultStateData,
       selectedMenu: 0
     }
   }
@@ -61,6 +38,7 @@ class App extends Component {
   mainScreen(){
     return [
       <MainDisplay data={this.state.data} />,
+      <HeatingDisplay data={this.state.data.heating} dataHandler={this.dataHandler} />,
       <GraphDisplay />,
       <HelpDisplay />
     ][this.state.selectedMenu]

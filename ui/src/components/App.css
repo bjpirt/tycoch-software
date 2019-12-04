@@ -83,6 +83,10 @@ h3{
   margin:10px 5px 10px 10px;
 }
 
+.heatingDisplay{
+  flex-direction: column;
+}
+
 button{
   padding:10px;
   flex: 1 1;

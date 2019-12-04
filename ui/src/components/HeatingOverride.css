@@ -1,0 +1,7 @@
+.heatingOverride button {
+  margin: 0 10px;
+}
+
+.heatingOverride button.inactive{
+  background:#AAA;
+}
