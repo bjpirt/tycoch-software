@@ -7,5 +7,5 @@ CREATE RETENTION POLICY ninetyday ON tycoch DURATION 90d REPLICATION 1
 CREATE RETENTION POLICY forever ON tycoch DURATION INF REPLICATION 1
 
 # Create the continuous queries to downsample the data
-CREATE CONTINUOUS QUERY "1m_cq" ON "tycoch" BEGIN SELECT mean(*) as "mean_1m" INTO "ninetyday".:MEASUREMENT FROM /.*/ GROUP BY time(1m) END
-CREATE CONTINUOUS QUERY "10m_cq" ON "tycoch" BEGIN SELECT mean(*) as "mean_10m" INTO "forever".:MEASUREMENT FROM /.*/ GROUP BY time(10m) END
+CREATE CONTINUOUS QUERY "1m_cq" ON "tycoch" BEGIN SELECT mean(*) as "mean_1m" INTO "ninetyday".:MEASUREMENT FROM /.*/ GROUP BY time(1m), * END
+CREATE CONTINUOUS QUERY "10m_cq" ON "tycoch" BEGIN SELECT mean(*) as "mean_10m" INTO "forever".:MEASUREMENT FROM /.*/ GROUP BY time(10m), * END
