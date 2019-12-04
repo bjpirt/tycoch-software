@@ -5,6 +5,7 @@ import sys
 import os
 import random
 import logging
+from datetime import datetime
 #logging.basicConfig()
 #log = logging.getLogger()
 #log.setLevel(logging.DEBUG)
@@ -46,7 +47,7 @@ for i in range(0, retries):
     else:
       res = client.read_holding_registers(0, 4, unit=BOILER_SENSOR)
       readings = map(lambda x: ctypes.c_short(x).value * 0.0078125, res.registers)
-  
+
     print("gas-boiler in-temp=%f,out-temp=%f" % (readings[0], readings[1]))
     print("temperature external=%f,monitor=%f" % (readings[2], readings[3]))
     break
@@ -78,12 +79,12 @@ for i in range(0, retries):
     else:
       res = client.read_holding_registers(0, 4, unit=TANK_SENSOR)
       readings = map(lambda x: ctypes.c_short(x).value * 0.0078125, res.registers)
-  
+
     out = []
     for index, temp in enumerate(readings):
       if temp != -256 and temp != -55:
         out.append("%s=%f" % (sensor_names[index],temp))
-  
+
     if len(out) > 0:
       #### Calculate the gradients and work out the % full
       total = 0
@@ -105,7 +106,7 @@ def unpackDate(date):
 
 def setHeatingTime(client):
   # Set time
-  t = datetime.datetime.now()
+  t = datetime.now()
   intTime = t.hour*60 + t.minute
   client.write_register(17, intTime, unit=HEATING)
 
