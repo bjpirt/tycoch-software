@@ -14,6 +14,7 @@ class DataHandler {
   
   handleMessage = (topic, message) => {
     let msg = JSON.parse(message);
+    if(!msg.timestamp) console.log(msg);
     for(var key in msg.fields){
       this.data[msg.name] = this.data[msg.name] || {};
       this.data[msg.name][key] = msg.fields[key];

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import HeatingOverride from './HeatingOverride';
+import HeatingTiming from './HeatingTiming';
 import './HeatingDisplay.css';
 
 class HeatingDisplay extends Component {
@@ -32,12 +33,17 @@ class HeatingDisplay extends Component {
     }
   }
 
+  setHeatingTiming = (timing) => {
+    console.log(timing);
+  }
+
   render(){
     return (
       <div className="heatingDisplay panelContainer">
         <div className="panel half timerPanel">
-          <h2>Timing Control</h2>          
-          
+          <h2>Timing</h2>
+          <HeatingTiming zone="upstairs" timing={this.props.data.timing.upstairs} onSet={this.setHeatingTiming} />
+          <HeatingTiming zone="downstairs" timing={this.props.data.timing.downstairs} onSet={this.setHeatingTiming} />
         </div>
         <div className="panel half electricityPanel">
           <h2>Overrides</h2>

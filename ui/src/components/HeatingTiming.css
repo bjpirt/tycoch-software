@@ -1,0 +1,22 @@
+.heatingTiming .timeline{
+  background:#888;
+  width:100%;
+  height:80px;
+  position:relative;
+}
+
+.heatingTiming .timeline .block{
+  background:#CCC;
+  display:inline-block;
+  vertical-align:bottom;
+  position:absolute;
+  bottom:0;
+  border:2px solid #333;
+  box-sizing: border-box;
+}
+.heatingTiming .timeline .block:first-child {
+  border-left:none;
+}
+.heatingTiming .timeline .block:last-child {
+  border-right: none;
+}

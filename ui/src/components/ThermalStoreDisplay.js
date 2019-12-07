@@ -27,11 +27,7 @@ class ThermalStoreDisplay extends Component {
         return blend(midCol, minCol, mid, min, temp);
       }
     }
-    //let css = `linear-gradient(to top, rgb(${calculateColor(this.props.values['tank-sensor1']).join(',')}) 0%, rgb(${calculateColor(this.props.values['tank-sensor2']).join(',')}) 33%, rgb(${calculateColor(this.props.values['tank-sensor3']).join(',')}) 66%, rgb(${calculateColor(this.props.values['tank-sensor4']).join(',')}) 100%)`;
-    let css = `linear-gradient(to top, #${calculateColor(this.props.values['tank-sensor1']).map(c => c.toString(16)).join('')} 0%, #${calculateColor(this.props.values['tank-sensor2']).map(c => c.toString(16)).join('')} 33%, #${calculateColor(this.props.values['tank-sensor3']).map(c => c.toString(16)).join('')} 66%, #${calculateColor(this.props.values['tank-sensor4']).map(c => c.toString(16)).join('')} 100%)`;
-    //let css = `linear-gradient(to top, #FF0000 0%, #00FF00 33%, #0000FF 66%, #00FFFF 100%)`;
-    console.log(css);
-    return css;
+    return `linear-gradient(to top, #${calculateColor(this.props.values['tank-sensor1']).map(c => c.toString(16)).join('')} 0%, #${calculateColor(this.props.values['tank-sensor2']).map(c => c.toString(16)).join('')} 33%, #${calculateColor(this.props.values['tank-sensor3']).map(c => c.toString(16)).join('')} 66%, #${calculateColor(this.props.values['tank-sensor4']).map(c => c.toString(16)).join('')} 100%)`;
   }
 
   render(){
