@@ -15,7 +15,7 @@ class App extends Component {
     this.dataHandler.onChange = this.updateState;
     this.state = {
       data: DefaultStateData,
-      selectedMenu: 0
+      selectedMenu: 1
     }
   }
   

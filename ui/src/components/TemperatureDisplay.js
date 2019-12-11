@@ -2,26 +2,6 @@ import React, { Component } from 'react';
 import './TemperatureDisplay.css';
 
 class TemperatureDisplay extends Component {
-  boost = () => {
-    console.log("Boosting " + this.props.zone)
-    let data = `heating ${this.props.zone}-boost=1`;
-    let url = `http://${window.location.host.split(':')[0]}:8086/write?db=tycoch&precision=s`;
-    fetch(url, {
-      method: 'POST',
-      body: data
-    }).catch(function(err) {
-      console.log('Fetch Error', err);
-    });
-  }
-  
-  controlElement(){
-    if(typeof this.props.control !== 'undefined' && !this.control){
-      return <span/>
-    }else{
-      return <button onClick={this.boost}>+1h Boost</button>
-    }
-  }
-  
   render(){
     let heatingState = () => {
       return this.props.state ? 'on' : 'off'
@@ -31,7 +11,6 @@ class TemperatureDisplay extends Component {
       <div className="temperatureDisplay">
         <span className={'heating-state-' + heatingState()}>{this.props.zone.charAt(0).toUpperCase() + this.props.zone.substr(1)}</span>
         <span>{this.props.temp.toFixed(1)}°C</span>
-        {this.controlElement()}
       </div>
     )
   }

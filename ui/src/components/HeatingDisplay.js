@@ -10,16 +10,37 @@ class HeatingDisplay extends Component {
     })
   }
 
-  handleOverride = (zone, type, amount) => {
+  nextChange(zone){
+    const timings = this.props.data.timing[zone];
+    if(timings.length === 0) return null;
+    const now = this.props.data.utctime;
+    let nextTime = timings[0][0];
+    for(let i in timings){
+      if(timings[i][0] > now){
+        nextTime = timings[i][0];
+        break;
+      }
+    };
+    return nextTime;
+  }
+
+  minutesUntilNextChange(zone){
+    const now = this.props.data.utctime;
+    const diff = this.nextChange(zone) - now;
+    if(diff < 0) return 1440 + diff;
+    return diff;
+  }
+
+  handleOverride = (zone, type) => {
     let values = [];
     if(this.props.dataHandler){
       if(type === 'boost'){
-        values.push({[`${zone}-boost`]: amount})
+        values.push({[`${zone}-boost`]: 60})
         values.push({[`${zone}-off-override`]: 0})
       }
       if(type === 'off-override'){
         values.push({[`${zone}-boost`]: 0})
-        values.push({[`${zone}-off-override`]: amount})
+        values.push({[`${zone}-off-override`]: this.minutesUntilNextChange(zone)})
       }
       if(type === 'timer'){
         values.push({[`${zone}-boost`]: 0})
@@ -33,22 +54,23 @@ class HeatingDisplay extends Component {
     }
   }
 
-  setHeatingTiming = (timing) => {
-    console.log(timing);
+  setHeatingTiming = (zone, timing) => {
+    this.props.dataHandler.sendMessage({
+      action: 'set',
+      values: [{[`${zone}-timing`]: timing}]
+    })
   }
 
   render(){
     return (
       <div className="heatingDisplay panelContainer">
-        <div className="panel half timerPanel">
+        <div className="panel full">
           <h2>Timing</h2>
           <HeatingTiming zone="upstairs" timing={this.props.data.timing.upstairs} onSet={this.setHeatingTiming} />
           <HeatingTiming zone="downstairs" timing={this.props.data.timing.downstairs} onSet={this.setHeatingTiming} />
-        </div>
-        <div className="panel half electricityPanel">
           <h2>Overrides</h2>
-          <HeatingOverride zone="upstairs" onClick={this.handleOverride} data={this.props.data}/>
-          <HeatingOverride zone="downstairs" onClick={this.handleOverride} data={this.props.data} />
+          <HeatingOverride zone="upstairs" onClick={this.handleOverride} data={this.props.data} nextChange={this.nextChange('upstairs')} />
+          <HeatingOverride zone="downstairs" onClick={this.handleOverride} data={this.props.data} nextChange={this.nextChange('downstairs')} />
         </div>
       </div>
     )

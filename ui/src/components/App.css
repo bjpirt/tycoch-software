@@ -52,7 +52,6 @@ h3{
 }
 
 .panel.full{
-  width:100%;
   flex: 1 0;
   overflow:auto;
 }
