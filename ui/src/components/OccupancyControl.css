@@ -1,0 +1,11 @@
+.occupancyControl {
+  margin: 0 0 20px;
+}
+
+.occupancyControl button {
+  margin: 0 10px;
+}
+
+.occupancyControl button.inactive{
+  background:#AAA;
+}

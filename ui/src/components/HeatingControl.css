@@ -1,0 +1,7 @@
+.heatingControl button {
+  margin: 0 10px;
+}
+
+.heatingControl button.inactive{
+  background:#AAA;
+}

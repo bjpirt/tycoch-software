@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import HeatingOverride from './HeatingOverride';
+import HeatingControl from './HeatingControl';
+import OccupancyControl from './OccupancyControl';
 import HeatingTiming from './HeatingTiming';
 import './HeatingDisplay.css';
 
@@ -61,6 +62,13 @@ class HeatingDisplay extends Component {
     })
   }
 
+  setOccupancy = (value) => {
+    this.props.dataHandler.sendMessage({
+      action: 'set',
+      values: [value]
+    })
+  }
+
   render(){
     return (
       <div className="heatingDisplay panelContainer">
@@ -68,9 +76,10 @@ class HeatingDisplay extends Component {
           <h2>Timing</h2>
           <HeatingTiming zone="upstairs" timing={this.props.data.timing.upstairs} onSet={this.setHeatingTiming} />
           <HeatingTiming zone="downstairs" timing={this.props.data.timing.downstairs} onSet={this.setHeatingTiming} />
-          <h2>Overrides</h2>
-          <HeatingOverride zone="upstairs" onClick={this.handleOverride} data={this.props.data} nextChange={this.nextChange('upstairs')} />
-          <HeatingOverride zone="downstairs" onClick={this.handleOverride} data={this.props.data} nextChange={this.nextChange('downstairs')} />
+          <h2>Controls</h2>
+          <HeatingControl zone="upstairs" onClick={this.handleOverride} data={this.props.data} nextChange={this.nextChange('upstairs')} />
+          <HeatingControl zone="downstairs" onClick={this.handleOverride} data={this.props.data} nextChange={this.nextChange('downstairs')} />
+          <OccupancyControl data={this.props.data} onSet={this.setOccupancy} />
         </div>
       </div>
     )

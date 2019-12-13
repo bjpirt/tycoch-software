@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import './HeatingOverride.css';
+import './HeatingControl.css';
 
-class HeatingOverride extends Component {
+class HeatingControl extends Component {
   button(type, amount, label){
     const data = (name) => this.props.data[this.props.zone + '-' + name];
     let buttonClass = "inactive";
@@ -51,7 +51,7 @@ class HeatingOverride extends Component {
   
   render(){
     return (
-      <div className="heatingOverride">
+      <div className="heatingControl">
         <h3>{this.props.zone.charAt(0).toUpperCase() + this.props.zone.substr(1)}</h3>
         { this.button('off-override', 60, this.offLabel()) }
         { this.button('timer', null, 'Timer') }
@@ -62,4 +62,4 @@ class HeatingOverride extends Component {
   }
 }
 
-export default HeatingOverride;
+export default HeatingControl;

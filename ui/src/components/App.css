@@ -131,6 +131,11 @@ button:disabled{
   flex: 4 0;
 }
 
+.info{
+  color:#FFF;
+  font-size:140%;
+}
+
 @media screen and ( max-height: 400px ){
   body{
     font-size:60%;
