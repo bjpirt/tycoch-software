@@ -1,0 +1,89 @@
+#!/usr/bin/env python
+
+import time
+import sys
+import os
+import random
+import logging
+from pymodbus.client.sync import ModbusSerialClient as ModbusClient
+import paho.mqtt.client as mqtt
+import json
+
+HEATING = 0x04
+port    = '/dev/rs485'
+HOUR    = 60
+DUMMY   = os.path.exists('/boot/dummy')
+RETRIES = 10
+
+dummyHeatingTimings = {
+  'upstairs': [
+    [(6 * HOUR), 15],
+    [(9 * HOUR), 13],
+    [(20 * HOUR), 18],
+    [(23 * HOUR), 14]
+  ],
+  'downstairs': [
+    [(6 * HOUR), 17],
+    [(10 * HOUR) + 30, 15],
+    [(18 * HOUR), 16],
+    [(22 * HOUR), 12]
+  ]
+}
+
+registers = {
+  'downstairs-boost': 8,
+  'upstairs-boost': 9,
+  'downstairs-off-override': 10,
+  'upstairs-off-override': 11,
+  'occupied': 12,
+  'downstairs-timing': 19,
+  'upstairs-timing': 31
+}
+
+def getHeatingTimings():
+  return dummyHeatingTimings
+
+def setRegisters(values):
+  for value in values:
+    for reg in value.items():
+      print(reg)
+      vals = reg[1]
+      if isinstance(vals, int):
+        vals = [vals]
+      elif isinstance(vals, list):
+        vals = sum(vals, [])
+      modbusWrite(registers[reg[0]], vals)
+
+def modbusWrite(register, values):
+  if DUMMY:
+    print("Writing to register %d, values: %s" % (register, str(values)))
+  else:
+    for i in range(0, RETRIES):
+      try:        
+        c = ModbusClient(method='rtu', port=port, baudrate=57600, timeout=1)
+        c.connect()
+        c.write_registers(register, values, unit=HEATING)
+        c.close
+      except:
+        time.sleep(0.25)
+        
+def on_message(client, userdata, message):
+  msg = json.loads(str(message.payload.decode("utf-8")))
+  if msg['action'] == 'set':
+    setRegisters(msg['values'])
+  if msg['action'] == 'getHeatingTiming':
+    client.publish('tycoch', json.dumps({"fields":{"timing":getHeatingTimings()},"name":"heating"}))
+
+client =mqtt.Client()
+client.connect('localhost')
+client.on_message = on_message
+client.subscribe('tycoch-settings/#')
+client.loop_start()
+
+try:
+    while True:
+        time.sleep(10)
+except KeyboardInterrupt:
+    print('Closing')
+    
+client.loop_stop()
