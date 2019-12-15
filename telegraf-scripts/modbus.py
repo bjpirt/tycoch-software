@@ -124,8 +124,8 @@ for i in range(0, retries):
                        int(r(0,1)), int(r(0,1)),
                        int(r(0,1)), int(r(0,1)),
                        0, 0,
-                       1,
-                       120, 120, 0,
+                       900,
+                       1400, 120, 0,
                        0]
     else:
       res = client.read_holding_registers(0, 17, unit=HEATING)
@@ -139,7 +139,7 @@ for i in range(0, retries):
     print("heating downstairs-off-override=%d,upstairs-off-override=%d" % (otherReadings[6], otherReadings[7]))
     print("heating occupied=%d" % int(otherReadings[8]))
     print("heating utctime=%d" % (otherReadings[9]))
-    print("heating localtime=%d" % (otherReadings[9]))
+    print("heating localtime=%d" % (otherReadings[10]))
     #print("heating utctime=%d:%d" % ((int(otherReadings[9])/60), int(otherReadings[9])%60))
     #print("heating localtime=%d:%d" % ((int(otherReadings[10])/60), int(otherReadings[10])%60))
     #print("heating date=%d/%d/20%d" % unpackDate(otherReadings[11]))
