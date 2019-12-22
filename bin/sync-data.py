@@ -17,9 +17,12 @@ except:
   from urllib.request import Request, urlopen
 
 if len(sys.argv) < 2:
+  print("No conf file supplied")
   sys.exit(1)
-else:
-  remote_url = sys.argv[1]
+
+conf_file_path = sys.argv[1]
+conf_file = open(conf_file_path, "r").read()
+conf = json.loads(conf_file)
 
 influx_host = 'localhost'
 
@@ -105,7 +108,7 @@ def limit_data_size(data, limit):
 
 def send_data(data):
   json_data = json.dumps(data).encode('UTF-8')
-  req = Request(remote_url, data=json_data)
+  req = Request(conf['remote_url'], data=json_data)
   req.add_header('Content-Type', 'application/json')
   request = urlopen(req)
 
