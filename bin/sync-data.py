@@ -122,7 +122,7 @@ def deflate(data, compresslevel=9):
 
 def send_data(data, zip = True):
   data_to_send = json.dumps(data).encode('UTF-8')
-  headers = {'Content-Type': 'application/json'}
+  headers = {'Content-Type': 'application/json', 'Authorization': 'Bearer %s' % conf['auth_token']}
   if zip:
     data_to_send = deflate(data_to_send)
     headers['Content-Encoding'] = 'gzip'
