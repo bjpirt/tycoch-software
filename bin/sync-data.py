@@ -124,7 +124,7 @@ def send_data(data, zip = True):
   data_to_send = json.dumps(data).encode('UTF-8')
   headers = {'Content-Type': 'application/json'}
   if zip:
-    data_to_send = deflate(json_data)
+    data_to_send = deflate(data_to_send)
     headers['Content-Encoding'] = 'gzip'
   res = requests.post(conf['remote_url'], data=data_to_send, headers=headers)
   if res.status_code >= 400:
@@ -134,9 +134,9 @@ def upload():
   start_time = get_start_time()
   data = fetch_data(start_time)
   if len(data['values']) > 0:
-    data = limit_data_size(data, 1)
+    data = limit_data_size(data, 2)
     try:
-      send_data(data, zip=False)
+      send_data(data, zip=True)
       write_log(data)
     except Exception:
       print("Error sending data")
