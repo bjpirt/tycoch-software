@@ -3,8 +3,11 @@
 import sys
 import json
 import time
+import traceback
+import zlib
 from datetime import datetime
 from datetime import timedelta
+import requests
 
 try:
   from urllib import urlencode
@@ -50,7 +53,6 @@ def check_first_time():
     first_record = query_influx('SELECT first("mean_1m_batt-voltage") FROM "tycoch"."ninetyday"."ac"', True)
     t = first_record['series'][0]['values'][0][0]
     write_time_log(t)
-    print(first_record['series'][0]['values'][0][0])
 
 def get_start_time():
   check_first_time()
@@ -79,7 +81,7 @@ def write_log(data):
 
 def reformat_columns(name, columns):
   filtered_columns = filter(lambda col: col != 'time', columns)
-  return list(map(lambda col: f'{name}-{col.replace("mean_10m_", "")}', filtered_columns))
+  return list(map(lambda col: '%s:%s' % (name, col.replace("mean_10m_", "")), filtered_columns))
 
 def round_values(values):
   return list(map(lambda val: round(val, 1) if val else None, values))
@@ -106,22 +108,39 @@ def limit_data_size(data, limit):
     data['values'] = dict(filtered)
   return data
 
-def send_data(data):
-  json_data = json.dumps(data).encode('UTF-8')
-  req = Request(conf['remote_url'], data=json_data)
-  req.add_header('Content-Type', 'application/json')
-  request = urlopen(req)
+def deflate(data, compresslevel=9):
+    compress = zlib.compressobj(
+      compresslevel,
+      zlib.DEFLATED,
+      zlib.MAX_WBITS | 16,
+      zlib.DEF_MEM_LEVEL,
+      zlib.Z_DEFAULT_STRATEGY
+    )
+    deflated = compress.compress(data)
+    deflated += compress.flush()
+    return deflated
+
+def send_data(data, zip = True):
+  data_to_send = json.dumps(data).encode('UTF-8')
+  headers = {'Content-Type': 'application/json'}
+  if zip:
+    data_to_send = deflate(json_data)
+    headers['Content-Encoding'] = 'gzip'
+  res = requests.post(conf['remote_url'], data=data_to_send, headers=headers)
+  if res.status_code >= 400:
+    raise Exception("Error sending data. Status: %d" % res.status_code)
 
 def upload():
   start_time = get_start_time()
   data = fetch_data(start_time)
   if len(data['values']) > 0:
-    data = limit_data_size(data, 150)
+    data = limit_data_size(data, 1)
     try:
-      send_data(data)
+      send_data(data, zip=False)
       write_log(data)
-    except:
+    except Exception:
       print("Error sending data")
+      traceback.print_exc()
 
 upload()
 
