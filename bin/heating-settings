@@ -52,11 +52,14 @@ def setRegisters(values):
         vals = [vals]
       elif isinstance(vals, list):
         vals = sum(vals, [])
-      modbusWrite(registers[reg[0]], vals)
+      if modbusWrite(registers[reg[0]], vals):
+        echoMessage(reg)
+  return True
 
 def modbusWrite(register, values):
   if DUMMY:
     print("Writing to register %d, values: %s" % (register, str(values)))
+    return True
   else:
     for i in range(0, RETRIES):
       try:        
@@ -64,13 +67,25 @@ def modbusWrite(register, values):
         c.connect()
         c.write_registers(register, values, unit=HEATING)
         c.close
+        return True
       except:
         time.sleep(0.25)
-        
+    return False
+
+def echoMessage(value):
+  fields = {}
+  if value[0].endswith('-timing'):
+    fields['timing'] = {}
+    fields['timing'][value[0].replace('-timing', '')] = value[1]
+  else:
+    fields[value[0]] = value[1]
+  client.publish('tycoch', json.dumps({"fields":fields,"name":"heating"}))
+
 def on_message(client, userdata, message):
   msg = json.loads(str(message.payload.decode("utf-8")))
   if msg['action'] == 'set':
     setRegisters(msg['values'])
+
   if msg['action'] == 'getHeatingTiming':
     client.publish('tycoch', json.dumps({"fields":{"timing":getHeatingTimings()},"name":"heating"}))
 
