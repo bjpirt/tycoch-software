@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import './HeatingControl.css';
 
 class HeatingControl extends Component {
-  button(type, amount, label){
+  button(type, label){
     const data = (name) => this.props.data[this.props.zone + '-' + name];
     let buttonClass = "inactive";
   
-    const clickHandler = (type, amount) => {
+    const clickHandler = (type) => {
       return () => {
         this.setState({clicking: true});
         this.props.onClick && this.props.onClick(this.props.zone, type);
@@ -14,14 +14,14 @@ class HeatingControl extends Component {
     }
     
     if(type === 'off-override'){
-      if(data('off-override') > 0 && data('off-override') <= 60 && amount === 60) buttonClass = 'active';
+      if(data('off-override') > 0) buttonClass = 'active';
     } else if(type === 'timer'){
       if(data('off-override') === 0 && data('boost') === 0) buttonClass = 'active';
     } else if(type === 'boost'){
-      if(data('boost') > 0 && data('boost') <= 60 && amount === 60) buttonClass = 'active';
+      if(data('boost') > 0) buttonClass = 'active';
     }
 
-    return <button className={buttonClass} onClick={clickHandler(type, amount)}>{label}</button>
+    return <button className={buttonClass} onClick={clickHandler(type)}>{label}</button>
   }
 
   info(){
@@ -53,9 +53,9 @@ class HeatingControl extends Component {
     return (
       <div className="heatingControl">
         <h3>{this.props.zone.charAt(0).toUpperCase() + this.props.zone.substr(1)}</h3>
-        { this.button('off-override', 60, this.offLabel()) }
-        { this.button('timer', null, 'Timer') }
-        { this.button('boost', 60, 'Boost 1h') }
+        { this.button('off-override', this.offLabel()) }
+        { this.button('timer', 'Timer') }
+        { this.button('boost', 'Boost 1h') }
         { this.info()}
       </div>
     )
