@@ -16,13 +16,13 @@ DUMMY   = os.path.exists('/boot/dummy')
 RETRIES = 10
 
 dummyHeatingTimings = {
-  'upstairs': [
+  'upstairs-timing': [
     [(6 * HOUR), 15],
     [(9 * HOUR), 13],
     [(20 * HOUR), 18],
     [(23 * HOUR), 14]
   ],
-  'downstairs': [
+  'downstairs-timing': [
     [(6 * HOUR), 17],
     [(10 * HOUR) + 30, 15],
     [(18 * HOUR), 16],
@@ -74,11 +74,7 @@ def modbusWrite(register, values):
 
 def echoMessage(value):
   fields = {}
-  if value[0].endswith('-timing'):
-    fields['timing'] = {}
-    fields['timing'][value[0].replace('-timing', '')] = value[1]
-  else:
-    fields[value[0]] = value[1]
+  fields[value[0]] = value[1]
   client.publish('tycoch', json.dumps({"fields":fields,"name":"heating"}))
 
 def on_message(client, userdata, message):
@@ -87,7 +83,7 @@ def on_message(client, userdata, message):
     setRegisters(msg['values'])
 
   if msg['action'] == 'getHeatingTiming':
-    client.publish('tycoch', json.dumps({"fields":{"timing":getHeatingTimings()},"name":"heating"}))
+    client.publish('tycoch', json.dumps({"fields":getHeatingTimings(),"name":"heating"}))
 
 client =mqtt.Client()
 client.connect('localhost')

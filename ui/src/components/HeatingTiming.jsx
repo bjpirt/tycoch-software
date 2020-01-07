@@ -109,17 +109,28 @@ class HeatingTiming extends Component {
         <Timeline />
 
         <label htmlFor="startHour">Start Time: </label>
-        <select name="startHour" onChange={this.updateTiming} value={this.state.selectedSlot === null ? '' : Math.floor(this.state.timing[this.state.selectedSlot][0]/60)}>
+        <select name="startHour"
+                disabled={this.state.selectedSlot === null}
+                onChange={this.updateTiming}
+                value={this.state.selectedSlot === null ? '' : Math.floor(this.state.timing[this.state.selectedSlot][0]/60)}>
           {this.options(0, 24, 1)}
         </select>
-        <select name="startMinute" onChange={this.updateTiming} value={this.state.selectedSlot === null ? '' : this.state.timing[this.state.selectedSlot][0]%60}>
+        <select name="startMinute"
+                disabled={this.state.selectedSlot === null}
+                onChange={this.updateTiming}
+                value={this.state.selectedSlot === null ? '' : this.state.timing[this.state.selectedSlot][0]%60}>
           {this.options(0, 60, 5)}
         </select>
         <label htmlFor="temperature"> Temperature: </label> 
-        <select name="temperature" onChange={this.updateTiming} value={this.state.selectedSlot === null ? '' : this.state.timing[this.state.selectedSlot][1]}>
+        <select name="temperature"
+                disabled={this.state.selectedSlot === null}
+                onChange={this.updateTiming}
+                value={this.state.selectedSlot === null ? '' : this.state.timing[this.state.selectedSlot][1]}>
           {this.options(10, 20, 1)}
         </select>
-        <button className={this.state.modified ? '': 'deselected'} disabled={!this.state.modified} onClick={this.saveTiming}>Save</button>
+        <button className={this.state.modified ? '': 'deselected'}
+                disabled={!this.state.modified}
+                onClick={this.saveTiming}>Save</button>
       </div>
     )
   }

@@ -12,7 +12,7 @@ class HeatingDisplay extends Component {
   }
 
   nextChange(zone){
-    const timings = this.props.data.timing[zone];
+    const timings = this.props.data[`${zone}-timing`];
     if(timings.length === 0) return null;
     const now = this.props.data.utctime;
     let nextTime = timings[0][0];
@@ -74,8 +74,8 @@ class HeatingDisplay extends Component {
       <div className="heatingDisplay panelContainer">
         <div className="panel full">
           <h2>Timing</h2>
-          <HeatingTiming zone="upstairs" timing={this.props.data.timing.upstairs} onSet={this.setHeatingTiming} />
-          <HeatingTiming zone="downstairs" timing={this.props.data.timing.downstairs} onSet={this.setHeatingTiming} />
+          <HeatingTiming zone="upstairs" timing={this.props.data['upstairs-timing']} onSet={this.setHeatingTiming} />
+          <HeatingTiming zone="downstairs" timing={this.props.data['downstairs-timing']} onSet={this.setHeatingTiming} />
           <h2>Controls</h2>
           <HeatingControl zone="upstairs" onClick={this.handleOverride} data={this.props.data} nextChange={this.nextChange('upstairs')} />
           <HeatingControl zone="downstairs" onClick={this.handleOverride} data={this.props.data} nextChange={this.nextChange('downstairs')} />

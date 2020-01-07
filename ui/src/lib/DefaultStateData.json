@@ -29,9 +29,7 @@
     "upstairs-off-override": 0,
     "upstairs-set-temp": 0,
     "occupied": 0,
-    "timing": {
-      "upstairs": [],
-      "downstairs": []
-    }
+    "downstairs-timing": [],
+    "upstairs-timing": []
   }
 }
