@@ -69,3 +69,8 @@
 .heatingTiming button{
   margin-left:10px;
 }
+.heatingTiming .marker{
+  position: absolute;
+  height:100%;
+  border-left:2px solid #DDD;
+}

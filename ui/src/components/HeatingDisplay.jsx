@@ -74,12 +74,30 @@ class HeatingDisplay extends Component {
       <div className="heatingDisplay panelContainer">
         <div className="panel full">
           <h2>Timing</h2>
-          <HeatingTiming zone="upstairs" timing={this.props.data['upstairs-timing']} onSet={this.setHeatingTiming} />
-          <HeatingTiming zone="downstairs" timing={this.props.data['downstairs-timing']} onSet={this.setHeatingTiming} />
+          <HeatingTiming
+            zone="upstairs"
+            timing={this.props.data['upstairs-timing']}
+            onSet={this.setHeatingTiming}
+            currentTime={this.props.data.utctime} />
+          <HeatingTiming
+            zone="downstairs"
+            timing={this.props.data['downstairs-timing']}
+            onSet={this.setHeatingTiming}
+            currentTime={this.props.data.utctime} />
           <h2>Controls</h2>
-          <HeatingControl zone="upstairs" onClick={this.handleOverride} data={this.props.data} nextChange={this.nextChange('upstairs')} />
-          <HeatingControl zone="downstairs" onClick={this.handleOverride} data={this.props.data} nextChange={this.nextChange('downstairs')} />
-          <OccupancyControl data={this.props.data} onSet={this.setOccupancy} />
+          <HeatingControl
+            zone="upstairs"
+            onClick={this.handleOverride}
+            data={this.props.data}
+            nextChange={this.nextChange('upstairs')} />
+          <HeatingControl
+            zone="downstairs"
+            onClick={this.handleOverride}
+            data={this.props.data}
+            nextChange={this.nextChange('downstairs')} />
+          <OccupancyControl
+            data={this.props.data}
+            onSet={this.setOccupancy} />
         </div>
       </div>
     )

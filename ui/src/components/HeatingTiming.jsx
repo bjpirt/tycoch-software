@@ -66,6 +66,12 @@ class HeatingTiming extends Component {
     return blocks;
   }
 
+  marker(){
+    const pos = (this.props.currentTime / 1440) * 100;
+    const style = {left: `${pos}%`}
+    return <div className="marker" style={style}></div>
+  }
+
   updateTiming = (e) => {
     let timing = this.state.timing;
     if(e.target.name === 'startHour'){
@@ -104,6 +110,7 @@ class HeatingTiming extends Component {
       <div className="heatingTiming">
         <h3>{this.props.zone.charAt(0).toUpperCase() + this.props.zone.substr(1)}</h3>
         <div className="timeline">
+          { this.marker() }
           { this.blocks() }
         </div>
         <Timeline />
