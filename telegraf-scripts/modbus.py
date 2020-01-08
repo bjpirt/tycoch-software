@@ -121,7 +121,7 @@ for i in range(0, retries):
     if DUMMY:
       tempsReadings = [r(20,2), r(20,2), r(20,2), r(20,2)]
       otherReadings = [int(r(16,6)), int(r(16,6)),
-                       int(r(0,1)), int(r(0,1)),
+                       0, 1,
                        int(r(0,1)), int(r(0,1)),
                        0, 0,
                        900,
