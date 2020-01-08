@@ -1,23 +1,35 @@
 .temperatureDisplay{
-  display:flex;
   background:#888;
   padding:0;
   margin:6px 0;
   color:#FFF;
+  position:relative;
 }
 
-.temperatureDisplay > *{
-  font-size:150%;
-  padding:10px 5px;
-  flex: 1 1;
-  display:block;
+.temperatureDisplay.on{
+  background:#82A282;
 }
 
-.temperatureDisplay span:first-child{
+.temperatureDisplay h4{
   text-align:right;
+  margin:0;
+  padding:5px;
 }
 
-.temperatureDisplay span.heating-state-on:first-child{
-  color:#49FF49;
-  font-weight:bold;
+.temperatureDisplay svg{
+  position:absolute;
+  top: 5px;
+  left:10px;
+  height:90%;
+  max-height:100%;
+  max-width:100%;
 }
+
+.temperatureDisplay svg tspan{
+  fill:#333;
+}
+
+.temperatureDisplay svg tspan.subText{
+  fill:#444;
+}
+
