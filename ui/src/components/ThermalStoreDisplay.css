@@ -8,6 +8,9 @@
   color:#FFF;
   text-align:center;
 }
+.thermalStore .diagram p:first-child, .thermalStore .diagram p:last-child{
+  font-size:200%;
+}
 .thermalStore .diagram{
   display: flex;
   flex-direction: column;

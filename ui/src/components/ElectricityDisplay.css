@@ -9,6 +9,7 @@
   text-align: center;
   background: #888;
   padding:5px;
+  max-height:25%;
 }
 
 .panel .displayBox h3{
@@ -17,7 +18,7 @@
 }
 
 .displayBox span{
-  font-size:300%;
+  font-size:400%;
   color:#444;
 }
 
