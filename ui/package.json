@@ -13,7 +13,7 @@
     "react-dom": "^16.4.1",
     "react-plotly.js": "^2.2.0",
     "react-redux": "^5.0.7",
-    "react-scripts": "1.1.4",
+    "react-scripts": "5.0.1",
     "react-timeseries-charts": "^0.15.3",
     "redux": "^4.0.0"
   },
