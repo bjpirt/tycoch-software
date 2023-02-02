@@ -43,7 +43,8 @@ else:
   res1 = client.read_holding_registers(15, 4, unit=246)
   ac_bv = client.read_holding_registers(26, 1, unit=246).registers[0]/100.0
   power = res1.registers[0]/10.0 * res1.registers[3]/10.0
-print("ac power-usage=%f,batt-voltage=%f" % (power, ac_bv))
+if power < 10000:
+  print("ac power-usage=%f,batt-voltage=%f" % (power, ac_bv))
 
 #### Battery status
 if DUMMY:
