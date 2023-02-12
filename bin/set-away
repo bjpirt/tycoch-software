@@ -8,11 +8,11 @@ import random
 import logging
 from pymodbus.client.sync import ModbusSerialClient as ModbusClient
 
-HEATING       = 0x04
+HEATING = 0x04
 port = '/dev/rs485'
 
 client = ModbusClient(method='rtu', port=port, baudrate=57600, timeout=1)
 client.connect()
-client.write_register(12, 0, unit=HEATING)
-client.write_register(8, 0, unit=HEATING)
-client.write_register(9, 0, unit=HEATING)
+client.write_register(12, 0, slave=HEATING)
+client.write_register(8, 0, slave=HEATING)
+client.write_register(9, 0, slave=HEATING)

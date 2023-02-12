@@ -13,7 +13,7 @@ from datetime import datetime
 DUMMY = os.path.exists('/boot/dummy')
 
 if not DUMMY:
-    from pymodbus.client.sync import ModbusSerialClient as ModbusClient
+    from pymodbus.client import ModbusSerialClient as ModbusClient
 
 BOILER_SENSOR = 0x01
 FIRE_SENSOR = 0x02
@@ -48,7 +48,7 @@ for i in range(0, retries):
         if DUMMY:
             readings = [r(20, 2), r(40, 4), r(8, 2), r(2, 1)]
         else:
-            res = client.read_holding_registers(0, 4, unit=BOILER_SENSOR)
+            res = client.read_holding_registers(0, 4, slave=BOILER_SENSOR)
             readings = map(lambda x: ctypes.c_short(
                 x).value * 0.0078125, res.registers)
 
@@ -66,7 +66,7 @@ for i in range(0, retries):
         if DUMMY:
             readings = [r(20, 2), r(40, 4), r(8, 2), r(2, 1)]
         else:
-            res = client.read_holding_registers(0, 4, unit=FIRE_SENSOR)
+            res = client.read_holding_registers(0, 4, slave=FIRE_SENSOR)
             readings = map(lambda x: ctypes.c_short(
                 x).value * 0.0078125, res.registers)
         print("fire in-temp=%f,out-temp=%f" % (readings[0], readings[1]))
@@ -85,7 +85,7 @@ for i in range(0, retries):
         if DUMMY:
             readings = [r(20, 10), r(40, 8), r(60, 5), r(75, 5)]
         else:
-            res = client.read_holding_registers(0, 4, unit=TANK_SENSOR)
+            res = client.read_holding_registers(0, 4, slave=TANK_SENSOR)
             readings = map(lambda x: ctypes.c_short(
                 x).value * 0.0078125, res.registers)
 
@@ -120,10 +120,10 @@ def setHeatingTime(client):
     # Set time
     t = datetime.now()
     intTime = t.hour*60 + t.minute
-    client.write_register(17, intTime, unit=HEATING)
+    client.write_register(17, intTime, slave=HEATING)
 
     intDate = ((t.year % 100) << 9) | ((t.month) << 5) | t.day
-    client.write_register(18, intDate, unit=HEATING)
+    client.write_register(18, intDate, slave=HEATING)
 
 # setHeatingTime(client)
 
@@ -141,7 +141,7 @@ for i in range(0, retries):
                              1400, 120, 0,
                              0]
         else:
-            res = client.read_holding_registers(0, 17, unit=HEATING)
+            res = client.read_holding_registers(0, 17, slave=HEATING)
             tempsReadings = list(map(lambda x: ctypes.c_short(
                 x).value * 0.0078125, res.registers[0:4]))
             otherReadings = list(

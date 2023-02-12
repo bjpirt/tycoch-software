@@ -67,8 +67,8 @@ def normalise_data(data):
                 time = valueGroup[0]
                 for index, value in enumerate(valueGroup[1:]):
                     if value != None:
-                        column = "{}{}".format(series_name,
-                                               columns[index].replace("mean_1m_", "")).replace("-", "")
+                        column = "{}.{}".format(series_name,
+                                                columns[index].replace("mean_1m_", ""))
                         if column not in output:
                             output[column] = []
 
